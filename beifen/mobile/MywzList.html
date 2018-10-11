@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {php echo register_jssdk(false);}
+    <title>我的文章列表</title>
+</head>
+ 
+	<link rel="stylesheet" href="{MD_ROOT}static/weui.css">
+	
+		<link rel="stylesheet" href="{MD_ROOT}static/css/layui.css">
+			<link rel="stylesheet" href="{MD_ROOT}static/css/base.css">
+			<link rel="stylesheet" href="{MD_ROOT}static/css/myplp.css">
+		<script src="{MD_ROOT}static/js/rem.js"></script>
+		<script src="{MD_ROOT}static/layui.all.js"></script>
+	<style>
+ 
+.right1 {
+    display: flex;
+    position: fixed;
+    bottom: 75px;
+    right: 0;
+    font-size: 15px;
+    height: 39px;
+    line-height: 39px;
+    z-index: 99;
+    background-color: rgba(255,130,71,.95);
+    border-radius: 20px 0 0 20px;
+    box-shadow: 0 1px 10px 1px rgba(59,107,174,.2);
+}
+.right2 {
+    display: flex;
+    position: fixed;
+    bottom: 35px;
+    right: 0;
+    font-size: 15px;
+    height: 39px;
+    line-height: 39px;
+    z-index: 99;
+    background-color: rgba(151,136,255,.95);
+    border-radius: 20px 0 0 20px;
+    box-shadow: 0 1px 10px 1px rgba(59,107,174,.2);
+}
+
+.logo1 {
+    width: 36px;
+    height: 100%;
+    background-image: url({MD_ROOT}static/img/bianji.png);
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
+    background-position: 13px 9px;
+    z-index: 1;
+}
+.logo2 {
+    width: 36px;
+    height: 100%;
+    background-image: url({MD_ROOT}static/img/fanhui.png);
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
+    background-position: 13px 9px;
+    z-index: 1;
+}
+.wenzi {
+    font-size: 14px;
+    color: #fff;
+    padding-right: 8px;
+    height: 100%;
+    left: 0;
+    display: inline-block;
+}
+</style>
+ 
+ 
+<script>
+    wx.ready(function () {
+        sharedata = {
+            title: '{$fxtitle}',
+            desc: '{$fxdetail}',
+             link: '{$fxurl}',
+            imgUrl: '{$avatar}',
+            success: function(){
+                 layer.ready(function(){
+						layer.msg('分享成功！');
+					});
+            },
+            cancel: function(){
+
+            }
+        };
+        wx.onMenuShareAppMessage(sharedata);
+    });
+</script>
+ <script src="{MD_ROOT}static/js/rem.js"></script>
+<body>
+
+ <div class="right1">
+  <span class="logo1"></span>
+  <span class="wenzi">
+     <a href="{php echo $this->createMobileUrl('Addurl');}"><font color=white> 创建</font></a>
+  </span>
+  </div>
+  
+
+    <div class="top-box">
+        <a class="top-left" href="{php echo $this->createMobileUrl('User_Edit');}">
+		  <button class="layui-btn layui-btn-sm">
+			<i class="layui-icon">&#xe65a;</i>设置
+		</button></a>
+        <p class="top-center">
+		{if $wznum>0 }
+		文章数量：{$wznum}  
+		{/if}
+		</p>
+		  <a class="top-right" href="{php echo $this->createMobileUrl('Mykhlist');}">    
+		  <button class="layui-btn layui-btn-sm">客户
+			<i class="layui-icon">&#xe65b;</i>
+		</button></a>
+		
+    </div>
+	 <div class="weui-panel weui-panel_access">
+       
+				
+			<div class="weui-panel__bd">
+			 {loop $wxapp $index $nav}
+                <a href="{php echo $this->createMobileUrl('Mywz');}&id={$nav['id']}" class="weui-media-box weui-media-box_appmsg">
+                    <div class="weui-media-box__hd">
+                    <img class="weui-media-box__thumb" src="{$nav['pic1']}" />
+				  </div>
+                    <div class="weui-media-box__bd">
+                        <h4 class="weui-media-box__title">{$nav['title']}</h4>
+                        <p class="weui-media-box__desc">阅读数：{$nav['readnum']}   时间：{php echo date("Y-m-d  ",($nav['addtime']));} </p>
+                    </div>
+                </a>
+              {/loop}
+            </div>
+
+ 
+        </div>
+		
+		{if $hcjs}
+		
+			<div class="weui-flex"> 
+            <div><div class="placeholder">&nbsp &nbsp </div></div>
+            <div class="weui-flex__item"><div class="placeholder">
+       <a href="javascript:window.location='{php echo $this->createMobileUrl('daima');}';"   > <button  class="layui-btn layui-btn-fluid layui-btn-radius layui-btn-danger" >请先设置个人信息</button></a>
+ 
+			</div></div>
+            <div><div class="placeholder">&nbsp&nbsp </div></div>
+		</div>
+  <br> 
+		{/if}
+		    
+{if $wznum<1}
+
+  <div class="weui-flex"> 
+            <div><div class="placeholder">&nbsp &nbsp </div></div>
+            <div class="weui-flex__item"><div class="placeholder">
+       <a href="javascript:window.location='{php echo $this->createMobileUrl('addurl');}';"   > <button  class="layui-btn layui-btn-fluid layui-btn-radius layui-btn-normal" >创建我的第一篇文章</button></a>
+ 
+			</div></div>
+            <div><div class="placeholder">&nbsp&nbsp </div></div>
+  </div>
+   
+  
+ 
+ 
+
+{/if}		
+ 
+		
+		
+		
+		
+
+<script src='{MD_ROOT}static/js/socket.io.js'></script>
+<script src="{MD_ROOT}static/js/jquery-1.8.3.min.js"></script>
+ 
+<script type="text/javascript">
+$(document).ready(function () {
+	var admin,userId,yyname;
+	var nickname="{$nickname}";
+	var avatar="{$avatar}";
+	var jsonid="{$jsonid}";
+    var pmsg="{$msg}";
+    var uid = "{$openid}";
+    var nickname="{$nickname}";
+	var avatar="{$avatar}";
+  
+    var socket = io('https://web.17cheng.cn:2120');
+  
+    socket.on('connect', function(){
+  				 
+    	socket.emit('login', {'uid':uid,'admin':admin,'userId':userId,'nickname':nickname,'avatar':avatar,'yyname':yyname,'jsonid':jsonid});
+    });
+
+ socket.on('new_msg', function(msg){
+     
+		online=true; 
+		 
+		console.log('fopenid:'+msg.fopenid);  
+ 	
+		var qiehuan="";
+		var qiehuanMe="";
+		var msgbox="";
+		khname=msg.nickname;
+		oavatar=msg.avatar;
+		if(msg.yyname==null){msg.yyname="";};
+		if(msg.jsonid==null){msg.jsonid="";};
+		$('#end'+msg.fopenid).html(msg.content.substring(0,15));
+			 var weidumsg=$('#wd'+msg.fopenid).text().trim();
+			 var weidushu=parseInt(weidumsg)+1;
+			$('#wd'+msg.fopenid).html(weidushu+"");   
+			
+		 
+		 layer.ready(function(){
+						layer.msg('新消息：'+msg.nickname+':'+msg.content);
+					});
+	 
+	} );
+} );
+
+
+ //   删除
+    $(".line-btn-delete").click(function () {
+        num=$(this).prev().attr("id");
+        console.log(num);
+        htmlobj=$.ajax({url:"{$website}/app/index.php?i={$uniacid}&c=entry&do=delplp&m=qidong_plp&action=del&id="+num,async:false});
+        if (htmlobj.responseText=="success") {
+           console.log(htmlobj)
+        }
+    })
+    $('.line-btn-delete').click(function(){
+        $(this).parent().parent().remove();
+    })
+    
+
+ </script>
+ 
+ 
+ 
+ 
+</body>
+</html>

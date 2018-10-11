@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {php echo register_jssdk(false);}
+    <title>我的推荐列表</title>
+</head>
+ <link rel="stylesheet" href="{MD_ROOT}static/css/base.css">
+<link rel="stylesheet" href="{MD_ROOT}static/css/myplp.css">
+	<link rel="stylesheet" href="{MD_ROOT}static/weui.css">
+<script>
+    wx.ready(function () {
+        sharedata = {
+            title: '{$fxtitle}',
+            desc: '{$fxdetail}',
+            link: '{$_W["siteurl"]}&fopenid={$openid}',
+            imgUrl: '{$avatar}',
+            success: function(){
+                alert('分享成功!');
+            },
+            cancel: function(){
+
+            }
+        };
+        wx.onMenuShareAppMessage(sharedata);
+    });
+</script>
+<link rel="stylesheet" href="{MD_ROOT}static/css/layui.css">
+ <script src="{MD_ROOT}static/js/rem.js"></script>
+ <script src="{MD_ROOT}static/js/layui.all.js"></script>
+
+ <script src="{MD_ROOT}static/js/echarts.common.min.js"></script>
+
+<body>
+   
+	
+	<div class="top-box">
+        <a class="top-left" href="{php echo $this->createMobileUrl('MykhList');}">
+		  <button class="layui-btn layui-btn-sm">
+			<i class="layui-icon">&#xe65a;</i>客户
+		</button></a>
+        <p class="top-center">数量：{$allnum['count']} </p>
+		  
+		
+    </div>
+	
+	 <div class="weui-panel weui-panel_access">
+            <div class="weui-panel__hd">我推荐的</div>
+ 
+			<div class="weui-panel__bd">
+			 {loop $wxapp $index $nav}
+                <a href="{php echo $this->createMobileUrl('kehusee');}&openid={$nav['openid']}" class="weui-media-box weui-media-box_appmsg">
+                    <div class="weui-media-box__hd">
+                    <img class="weui-media-box__thumb" src="{$nav['logo']}" />
+				  </div>
+                    <div class="weui-media-box__bd">
+                        <h4 class="weui-media-box__title">{$nav['nickname']}  </h4>
+                        <p class="weui-media-box__desc">状态:{$nav['vip']}    时间：{php echo date("Y-m-d ",($nav['addtime']));} </p>
+                    </div>
+                </a>
+              {/loop}
+            </div>
+			 
+ 
+        </div>
+<script src='{MD_ROOT}static/js/socket.io.js'></script>
+<script src="{MD_ROOT}static/js/jquery-1.8.3.min.js"></script>
+ 
+<script type="text/javascript">
+$(document).ready(function () {
+	var admin,userId,yyname;
+	var nickname="{$nickname}";
+	var avatar="{$avatar}";
+	var jsonid="{$jsonid}";
+    var pmsg="{$msg}";
+    var uid = "{$openid}";
+    var nickname="{$nickname}";
+	var avatar="{$avatar}";
+  
+    var socket = io('https://web.17cheng.cn:2120');
+  
+    socket.on('connect', function(){
+  				 
+    	socket.emit('login', {'uid':uid,'admin':admin,'userId':userId,'nickname':nickname,'avatar':avatar,'yyname':yyname,'jsonid':jsonid});
+    });
+
+ socket.on('new_msg', function(msg){
+     
+		online=true; 
+		 
+		console.log('fopenid:'+msg.fopenid);  
+ 	
+		var qiehuan="";
+		var qiehuanMe="";
+		var msgbox="";
+		khname=msg.nickname;
+		oavatar=msg.avatar;
+		if(msg.yyname==null){msg.yyname="";};
+		if(msg.jsonid==null){msg.jsonid="";};
+		$('#end'+msg.fopenid).html(msg.content.substring(0,15));
+			 var weidumsg=$('#wd'+msg.fopenid).text().trim();
+			 var weidushu=parseInt(weidumsg)+1;
+			$('#wd'+msg.fopenid).html(weidushu+"");   
+			
+		 alert('新消息：'+msg.nickname+':'+msg.content);
+	 
+	} );
+} );
+
+
+ //   删除
+    $(".line-btn-delete").click(function () {
+        num=$(this).prev().attr("id");
+        console.log(num);
+        htmlobj=$.ajax({url:"{$website}/app/index.php?i={$uniacid}&c=entry&do=delplp&m=qidong_plp&action=del&id="+num,async:false});
+        if (htmlobj.responseText=="success") {
+           console.log(htmlobj)
+        }
+    })
+    $('.line-btn-delete').click(function(){
+        $(this).parent().parent().remove();
+    })
+    
+
+ </script>
+ 
+ 
+  <script>
+       
+        var myChart = echarts.init(document.getElementById('main'),'light');
+    
+        var option = {
+            title: {
+                text: '客服聊天数据图'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+			legend: {
+                data:[{$kefus}]
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+          
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+				 
+                 {$source}
+				 
+            ]
+        };
+      
+        myChart.setOption(option);
+
+
+
+
+    </script>
+	
+</body>
+</html>

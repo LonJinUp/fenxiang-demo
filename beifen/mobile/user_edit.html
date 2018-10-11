@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {php echo register_jssdk(false);}
+  
+<title>{$webname}用户编辑</title>
+ <style>
+.alsp{ text-align:center;font-family:"楷体"; font-size:26px;  background-color:OldLace;}
+.center
+{
+margin-left:auto;
+ 
+    padding:10px; width:80px; height:80px;
+    
+    -moz-border-radius: 15px;      
+    -webkit-border-radius: 15px;   
+    border-radius:15px;           
+ 
+}
+
+</style>
+    <link rel="stylesheet" href="{MD_ROOT}static/css/base.css">
+<link rel="stylesheet" href="{MD_ROOT}static/css/myplp.css">
+	<link rel="stylesheet" href="{MD_ROOT}static/weui.css">
+	<link rel="stylesheet" href="{MD_ROOT}static/css/layui.css">
+ <script src="{MD_ROOT}static/js/rem.js"></script>
+ <script src="{MD_ROOT}static/layui.all.js"></script>
+  <script src="{MD_ROOT}static/js/jquery-3.1.1.min.js"></script>
+   <!-- <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>  -->
+ <script>
+ layer.ready(function(){
+  layer.msg('小提示：更新完图标记得点击右上角的生成按钮哦');
+}); 
+ </script>
+</head>
+<body>
+ 	<div class="top-box">
+        <a class="top-left" href="{php echo $this->createMobileUrl('daima');}"> 
+		<button class="layui-btn layui-btn-sm">生成在线按钮</button>
+		</a>
+   
+
+        <p class="top-center">系统设置</p>
+		 <a class="top-right" href="{php echo $this->createMobileUrl('MywzList');}">    
+		  <button class="layui-btn layui-btn-sm">文章
+			<i class="layui-icon">&#xe65b;</i>
+		</button></a>
+		  
+		
+    </div>
+	
+<div style="border: 0px solid #000000;  margin: 10 auto;width=80%">
+ 
+   <form action="{php echo $this->createMobileUrl('user_edit');}" method="post">
+ <div class="layui-container">  
+ 
+ 
+
+  
+  </div>
+  <div class="weui-cells weui-cells_form">
+
+  
+             <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">头像</label></div>
+                <div class="weui-cell__bd">
+                   
+				   <img width="50px" id="mylogo"  onclick="javascript:openBrowse();" class="layui-circle" src="{$wxapp[0]['logo']}">  
+      <input id="fenxiangtu" name="t[logo]" type="text" value="{$wxapp[0]['logo']}" class="form-control layui-hide" id="beizhu" placeholder="请输入标题">
+
+     <button type="button" class="layui-btn layui-hide" id="test1">
+ 
+      <input type="file" name="file"  id = "input_file" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg" onchange="imgPreview(this)" >  
+
+</button>
+                </div>
+            </div>
+			
+			 
+			
+			<div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">openid：</label></div>
+                <div class="weui-cell__bd">
+                    <p> {$wxapp[0]['openid']}</p>
+                </div>
+            </div>
+			
+ 
+			
+        	 <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">昵称</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" name="t[nickname]" type="text" value="{$wxapp[0]['nickname']}" placeholder="请输入中文关键词">
+                </div>
+            </div>
+		 
+   
+		 
+            </div>   
+			 <div class="weui-cell layui-bg-gray">
+					<div class="weui-cell__hd">
+					</div>
+			  </div>
+	 
+		   
+		    <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">客服位置</label></div>
+                <div class="weui-cell__bd">
+				    右下角
+                 </div>
+            </div>
+			
+		   <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">打招呼</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" name="t[firstsay]" type="text" value="{$wxapp[0]['firstsay']}" placeholder="请输入打招呼语句">
+                </div>
+            </div>
+		 <div class="weui-cell layui-bg-gray">
+					<div class="weui-cell__hd">
+					</div>
+			  </div>
+		  <div class="weui-cell">
+                <label class="weui-label">关注公众号</label> 
+                  <div class="weui-cell__bd"> 获得实时提醒 </div>
+            </div>
+		    <div class="weui-cell">
+                <div class="weui-cell__hd">&#xe677;</div>
+                <div class="weui-cell__bd">
+					<img width="250px" src="{$gzh}"/>
+				</div>
+            </div>
+ 
+		<div class="weui-cell layui-bg-gray">
+					<div class="weui-cell__hd">
+					</div>
+			  </div>
+				 
+			<input type="hidden" name="action"  value="edit">   		
+   
+			<input type="hidden" name="jsonid"  value="{$jsonid}">
+			 
+			<input type="hidden" name="uniacid" value="{$uniacid}">
+		 
+  
+         <!-- 添加隐藏自动 判断字符是否正常 ..然后修改.-->
+		  <br>
+		  
+		    <div class="weui-flex"> 
+            <div><div class="placeholder">&nbsp &nbsp </div></div>
+            <div class="weui-flex__item"><div class="placeholder">
+     <input  class="layui-btn layui-btn-fluid" name="submit" type="submit" value="保存修改" > 
+ 
+			</div></div>
+            <div><div class="placeholder">&nbsp&nbsp </div></div>
+  </div>
+  
+
+   
+   
+	 
+ 
+	</form>	
+	  <br>
+	 
+
+ 	
+ 
+  
+  
+  <script>
+function imgPreview(fileDom) {
+    //判断是否支持FileReader
+    if(window.FileReader) {
+        var reader = new FileReader();
+    } else {
+        alert("您的设备不支持图片预览功能，如需该功能请升级您的设备！");
+    }
+    //获取文件
+    var file = fileDom.files[0];
+    var imageType = /^image\//;
+    //是否是图片
+    if(!imageType.test(file.type)) {
+        alert("请选择图片！");
+        return;
+    }
+    //读取完成
+    reader.onload = function(e) {
+        //获取图片dom
+        var img = document.getElementById("preview");
+        //图片路径设置为读取的图片
+       // img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+	
+	var formData = new FormData();	
+				formData.append("keyword", $('#input_file')[0].files[0]);	
+				formData.append("website","{$website}");	
+				formData.append("uniacid","{$uniacid}");	
+				$.ajax({						
+				type:"post",					
+				url:"{$website}"+"/addons/huoban_mima/saveimage.php",	
+				async:true,                 					
+				cache:false,					
+				data:formData,						
+				processData:false,						
+				contentType:false,						
+				dataType:"json",						
+				success:function(data){		
+			 	console.log('ok');	
+					console.log(data);	
+					if(data.ok == 1){					
+						 						
+						$('#fenxiangtu').val(data.path)     ;	
+						$('#mylogo').attr('src',data.path); 						
+						console.log(data.path );
+						layer.ready(function(){
+							layer.msg('图片更新成功！');
+						}); 
+					}							
+					if(data.ok != 1 && data.ok != 103){			
+						alert("error!");				
+					}				    		
+			 						},					
+			error:function(){
+		
+				alert("error!0");					
+			}					}); 
+			
+}
+
+ 
+
+   </script>
+ 
+  <script> 
+
+function openBrowse(){ 
+
+　　var ie=navigator.appName=="Microsoft Internet Explorer" ? true : false; 
+
+　　if(ie){ 
+
+　　　　document.getElementById("input_file").click(); 
+
+　　}else{
+
+　　　　var a=document.createEvent("MouseEvents");//FF的处理 
+
+　　　　a.initEvent("click", true, true);  
+
+　　　　document.getElementById("input_file").dispatchEvent(a); 
+
+　　} 
+
+} 
+
+</script> 
+ 
+ 
+</body>
+</html>
+ 

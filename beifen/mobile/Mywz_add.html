@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>添加文章</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+  <link href="{MD_ROOT}static/js/edit/bootstrap.css" rel="stylesheet">
+  <script src="{MD_ROOT}static/js/edit/jquery.js"></script> 
+  <script src="{MD_ROOT}static/js/edit/bootstrap.js"></script> 
+  <link href="//cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet">
+  <script src="{MD_ROOT}static/js/edit/summernote.js"></script>
+  <script>
+function imgPreview(fileDom) {
+    //判断是否支持FileReader
+    if(window.FileReader) {
+        var reader = new FileReader();
+    } else {
+        alert("您的设备不支持图片预览功能，如需该功能请升级您的设备！");
+    }
+    //获取文件
+    var file = fileDom.files[0];
+    var imageType = /^image\//;
+    //是否是图片
+    if(!imageType.test(file.type)) {
+        alert("请选择图片！");
+        return;
+    }
+    //读取完成
+    reader.onload = function(e) {
+        //获取图片dom
+        var img = document.getElementById("preview");
+        //图片路径设置为读取的图片
+        img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+	
+	var formData = new FormData();	
+				formData.append("keyword", $('#input_file')[0].files[0]);	
+				formData.append("website","{$website}");	
+				formData.append("uniacid","{$uniacid}");	
+				$.ajax({						
+				type:"post",					
+				url:"{$website}"+"/addons/huoban_mima/saveimage.php",	
+				async:true,                 					
+				cache:false,					
+				data:formData,						
+				processData:false,						
+				contentType:false,						
+				dataType:"json",						
+				success:function(data){		
+			 	console.log('ok');	
+					console.log(data);	
+					if(data.ok == 1){					
+						//var imgNode = document.createElement("img");                            	//读取后台返回的图片url       
+						//imgNode.src = "{$website}"+"/addons/huoban_mima/"+data.path;                          
+						//console.log(imgNode.src);							
+						$('#fenxiangtu').val(data.path)     ;		
+						console.log(data.path );
+					}							
+					if(data.ok != 1 && data.ok != 103){			
+						alert("error!");				
+					}				    		
+			 						},					
+			error:function(){
+		
+				alert("error!0");					
+			}					}); 
+			
+}
+
+ 
+
+   </script>
+</head>
+<body>
+  
+  <form method="post" action="{php echo $this->createMobileUrl('Mywz_add');}">
+ 
+   <div class="form-group">
+    <label for="name">标题</label>
+    <input name="t[title]" type="text" value="{$wxapp[0]['title']}" class="form-control" id="name" placeholder="请输入标题">
+  </div>
+     
+  <div class="form-group">
+    <label for="name">简要[转发时的详情内容】</label>
+    <input name="t[beizhu]" type="text" value="{$wxapp[0]['beizhu']}" class="form-control" id="beizhu" placeholder="请输入标题">
+  </div>
+      <div class="form-group">
+    <label for="name">分享图</label>
+    <input id="fenxiangtu" name="t[pic1]" type="text" value="{$wxapp[0]['pic1']}" class="form-control" id="beizhu" placeholder="请输入标题">
+  
+    <img width="100px" id="preview" />
+  
+    <input type="file" name="file" id = "input_file" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg" onchange="imgPreview(this)" >  
+</div>
+  <div class="checkbox">
+    <label>
+      <input name="openkefu" type="checkbox" {if $wxapp[0]['openkefu']==1} checked="checked" {/if}>显示在线客服
+    </label>
+  </div>
+  
+  
+  <textarea id="summernote" name="detail">
+  <h2 class="rich_media_title" id="activity-name"> 
+                    你的文章标题 </h2>
+			<div id="meta_content" class="rich_media_meta_list">
+                                                                                
+                                        <span class="rich_media_meta rich_media_meta_nickname" id="profileBt">
+                      <a href="javascript:void(0);" id="js_name">
+                        {$nickname}                      </a>
+                      <div id="js_profile_qrcode" class="profile_container" style="display:none;">
+                          <div class="profile_inner">
+                              <strong class="profile_nickname">   {$nickname}   </strong>
+                              <img class="profile_avatar" id="js_profile_qrcode_img" src="" alt="">
+
+                              <p class="profile_meta">
+                              <label class="profile_meta_label">微信号</label>
+                              <span class="profile_meta_value"></span>
+                              </p>
+
+                            
+                              
+                          </div>
+                          <span class="profile_arrow_wrp" id="js_profile_arrow_wrp">
+                              <i class="profile_arrow arrow_out"></i>
+                              <i class="profile_arrow arrow_in"></i>
+                          </span>
+                      </div>
+                    </span>
+
+
+                    <em id="publish_time" class="rich_media_meta rich_media_meta_text">{php echo date("m月d日 ",time());}</em>
+
+
+
+
+
+                </div>		<br><br>
+					</textarea>
+  
+  			<input type="hidden" name="action"  value="edit">   		
+ 		   
+			 
+			<input type="hidden" name="t[type]" value="原创">
+			<input type="hidden" name="t[readnum]" value=0>
+   <div id='dg' style='z-index: 9998;  position: fixed ! important; right: 0px; bottom:0px; width="100%" '> 
+   <button type="submit" class="btn btn-primary btn-lg btn-block">立即保存</button>
+<br>
+ 
+    
+	 
+</form>
+  <script>
+    $(document).ready(function() {
+	$('#summernote').summernote({	
+	height: '100%',                 // set editor height			
+	minHeight: null,             // set minimum height of editor			
+	maxHeight: null,             // set maximum height of editor			
+	focus: true,                 // set focus to editable area after initializing summernote			
+	lang:'zh-CN',			//fontNames: ['helvetica'],			
+	toolbar: [                //字体工具               
+	['fontname', ['fontname']], //字体系列                                                 
+	['style', ['bold', 'italic', 'underline', 'clear']], // 字体粗体、字体斜体、字体下划线、字体格式清除
+	['font', ['strikethrough', 'superscript', 'subscript']], //字体划线、字体上标、字体下标
+	['fontsize', ['fontsize']], //字体大小        
+	['color', ['color']], //字体颜色                                //段落工具           
+	['style', ['style']],//样式               
+	['para', ['ul', 'ol', 'paragraph']], //无序列表、有序列表、段落对齐方式       
+	['height', ['height']], //行高                                //插入工具        
+	['table',['table']], //插入表格                    
+	['hr',['hr']],//插入水平线                                
+	['link',['link']], //插入链接                              
+	['picture',['picture']], //插入图片                               
+	['video',['video']], //插入视频                                //其它          
+	['fullscreen',['fullscreen']], //全屏              
+	['codeview',['codeview']], //查看html代码               
+	['undo',['undo']], //撤销                
+	['redo',['redo']], //取消撤销               
+	['help',['help']], //帮助            
+	],            
+		callbacks:{      
+			
+			onImageUpload:function(files){
+				var formData = new FormData();	
+				formData.append("keyword",files[0]);	
+				formData.append("website","{$website}");	
+				formData.append("uniacid","{$uniacid}");	
+				$.ajax({						
+				type:"post",					
+				url:"{$website}"+"/addons/huoban_mima/saveimage.php",	
+				async:true,                 					
+				cache:false,					
+				data:formData,						
+				processData:false,						
+				contentType:false,						
+				dataType:"json",						
+				success:function(data){		
+			 	console.log('ok');	
+					console.log(data);	
+					if(data.ok == 1){					
+						var imgNode = document.createElement("img");                            	//读取后台返回的图片url       
+						imgNode.src = data.path;                          
+						console.log(imgNode.src);							
+						$('#summernote').summernote('insertImage',imgNode.src);		
+					}							
+					if(data.ok != 1 && data.ok != 103){			
+						alert("error!");				
+					}				    		
+			 						},					
+			error:function(){
+		
+				alert("error!0");					
+			}					});        
+			}            } 	
+			});
+			
+    });
+	
+
+ 
+ 
+  </script>
+</body>
+</html>

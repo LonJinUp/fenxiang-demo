@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {php echo register_jssdk(false);}
+    <title>我的客户列表</title>
+			<link rel="stylesheet" href="{MD_ROOT}static/css/layui.css">
+			<link rel="stylesheet" href="{MD_ROOT}static/css/base.css">
+			<link rel="stylesheet" href="{MD_ROOT}static/css/myplp.css">
+		<script src="{MD_ROOT}static/js/rem.js"></script>
+		<script src="{MD_ROOT}static/layui.all.js"></script>
+</head>
+    
+	 
+ 
+ 
+
+ 
+<body>
+    <div class="top-box">
+       
+		<a class="top-left" href="{php echo $this->createMobileUrl('MykhList');}">
+		  <button class="layui-btn layui-btn-sm">
+			<i class="layui-icon">&#xe65a;</i>客户
+		</button></a>
+		
+        <p class="top-center">{$wxapp[0]['nickname']}:{$fxnum['count']}</p>
+    </div>
+	<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+  <ul class="layui-tab-title">
+    <li class="layui-this">浏览历史</li>
+    <li>聊天记录</li>
+    <li>用户备注</li>
+    
+  </ul>
+  
+  <div class="layui-tab-content" style="height: 500px;">
+    <div class="layui-tab-item layui-show">
+	<ul class="layui-timeline">
+			 {loop $wxapp $index $nav}
+			
+		  <li class="layui-timeline-item">
+			<i class="layui-icon layui-timeline-axis">
+			{if $nav['avatar']<>''}
+			<img src="{$nav['avatar']}" width="20px" class="layui-circle"/>
+			{else}
+			&#xe63f;
+			{/if}
+			</i>
+			<div class="layui-timeline-content layui-text">
+			  <h3 class="layui-timeline-title">{php echo date("m月d日 ",$nav['addtime']);}</h3>
+			  <p>
+				阅读：{$nav['wztitle']}
+				<br>次数：<span class="layui-badge-rim">{$nav['readnum']}</span>
+				{if $nav['zhuafanum']>0}
+				<br>分享级别：<span class="layui-badge-rim">{$nav['zhuafanum']}</span> 
+				{/if}
+				{if $nav['fromuser']<>'0'}
+				<br>分享来自：<a href="{php echo $this->createMobileUrl('kehusee');}&openid={$nav['openid']}">{$nav['fromuser']} </a>
+			    {/if}
+			 </p>
+			</div>
+		  </li>
+			 {/loop}
+		  
+		  
+		</ul>
+	
+	</div>
+    <div class="layui-tab-item">
+	    
+		<ul class="layui-timeline">
+			 {loop $liaotianjl $index $nav}
+			
+		  <li class="layui-timeline-item">
+			<i class="layui-icon layui-timeline-axis">
+				{if $nav['add1']==1}
+				    {if $wxapp[0]['avatar']<>''}
+					<img src="{$wxapp[0]['avatar']}" width="20px" class="layui-circle"/>
+					{else}
+					&#xe611;
+					{/if}
+				{else}
+			       {if $kfavatar<>''}
+					<img src="{$kfavatar}" width="20px" class="layui-circle"/>
+					{else}
+					&#xe6fc;
+					{/if}
+			 
+				{/if}
+			
+			
+			</i>
+			<div class="layui-timeline-content layui-text">
+			  <h3 class="layui-timeline-title">{php echo date("y-m-d h:i:s",$nav['updatetime']);}</h3>
+			 
+			  
+				 <p>{$nav['keyword']} </p>
+			 
+			 
+			
+			</div>
+		  </li>
+			 {/loop}
+		  
+		  
+		</ul>
+	
+	</div>
+ <div class="layui-tab-item">
+	<form class="layui-form" action="{php echo $this->createMobileUrl('Kehusee');}" method="post">
+		<div class="layui-form-item">
+		<label class="layui-form-label">备注</label>
+		<div class="layui-input-block">
+		<input type="hidden" name="openid"  value="{$openid}">
+			<input type="text" name="beizhu" required  lay-verify="required" value="{$wxapp[0]['beizhu']}" placeholder="请输入备注" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+ 
+  
+ 
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button class="layui-btn" type="submit"  >立即提交</button>
+      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    </div>
+  </div>
+  
+</form>
+ 
+ 
+	
+	</div>
+    <div class="layui-tab-item">4</div>
+    <div class="layui-tab-item">5</div>
+    <div class="layui-tab-item">6</div>
+  </div>
+  
+</div>    
+	
+	
+	
+	
+	
+ 
+  
+</body>
+</html>

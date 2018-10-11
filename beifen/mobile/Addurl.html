@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+	
+    {php echo register_jssdk(false);}
+    <title>我的文章列表</title>
+
+	<link rel="stylesheet" href="{MD_ROOT}static/css/base.css">
+	<link rel="stylesheet" href="{MD_ROOT}static/css/myplp.css">
+	<link rel="stylesheet" href="{MD_ROOT}static/weui.css">
+<script>
+    wx.ready(function () {
+        sharedata = {
+            title: '{$fxtitle}',
+            desc: '{$fxdetail}',
+            link: '{$_W["siteurl"]}&fopenid={$openid}',
+            imgUrl: '{$avatar}',
+            success: function(){
+                alert('分享成功!');
+            },
+            cancel: function(){
+
+            }
+        };
+        wx.onMenuShareAppMessage(sharedata);
+    });
+</script>
+
+ 
+   <script src="{MD_ROOT}static/js/edit/jquery-2.1.1.min.js"></script>
+   
+ <link href="{MD_ROOT}static/js/edit/bootstrap.css" rel="stylesheet">
+   <script src="{MD_ROOT}static/js/edit/bootstrap.js"></script> 
+   
+<style>
+
+._1k19YN3-qdVhoYpBLDMjYV {
+    display: flex;
+    position: fixed;
+    bottom: 75px;
+    right: 0;
+    font-size: 15px;
+    height: 39px;
+    line-height: 39px;
+    z-index: 99;
+    background-color: rgba(51,136,255,.95);
+    border-radius: 20px 0 0 20px;
+    box-shadow: 0 1px 10px 1px rgba(59,107,174,.2);
+}
+._1k19YN3-qdVhoYpBLDMjYV .psDTG2YH-UVvL5hI8Ye4a {
+    width: 36px;
+    height: 100%;
+    background-image: url(https://b.bdstatic.com/searchbox/icms/searchbox/img/horn_white.png);
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
+    background-position: 13px 9px;
+    z-index: 1;
+}
+._1k19YN3-qdVhoYpBLDMjYV ._2v86xffLyWbTz5nRDFr_L_ {
+    font-size: 14px;
+    color: #fff;
+    padding-right: 8px;
+    height: 100%;
+    left: 0;
+    display: inline-block;
+}
+</style>
+	
+	
+ <script src="{MD_ROOT}static/js/rem.js"></script>
+</head>
+<body>
+    <div class="top-box">
+        <a class="top-left" href="{php echo $this->createMobileUrl('MywzList');}"><文章列表</a>
+		{if $freenum<>''}
+        <p class="top-center">可创建{$freenum},已创建{$wznum}</p>
+		{else}
+		 <p class="top-center">VIP权限，无限创建中</p>
+		{/if}
+    </div>
+	
+	 <div class="weui-panel weui-panel_access">
+           
+			 
+			<div class="weui-panel__bd">
+			 <form action="{php echo $this->createMobileUrl('DownUrl');}" method="post">
+			 
+			 <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <textarea class="form-control" name="url" placeholder="请将微信文章地址粘贴到此处" rows="3"></textarea>
+                    <div class="weui-textarea-counter"> </div>
+                </div>
+            </div>
+				</div>
+		
+		 {if $vip}
+			  <div class="weui-flex"> 
+				<div><div class="placeholder">&nbsp &nbsp </div></div>
+			     <input name="submit" type="submit" value="添加文章" class="btn btn-info btn-lg btn-block btn-success" style="display: block;"> 
+				<div><div class="placeholder">&nbsp&nbsp </div></div>
+		    </div> 
+		{else}
+		   {if $freenum>$wznum}
+		     <div class="weui-flex"> 
+				<div><div class="placeholder">&nbsp &nbsp </div></div>
+			     <input name="submit" type="submit" value="添加文章[试用中]" class="btn btn-primary btn-lg btn-block btn-success" style="display: block;"> 
+				<div><div class="placeholder">&nbsp&nbsp </div></div>
+		     </div> 
+		   {else}
+		     <div class="weui-flex"> 
+            <div><div class="placeholder">&nbsp &nbsp </div></div>
+            <div class="weui-flex__item"><div class="placeholder">
+            <a href="javascript:window.location='{php echo $this->createMobileUrl('govip');}';"   class="btn btn-warning btn-lg btn-block"  > 已经超过试用数量[请升级VIP]</a>
+ 
+			</div></div>
+            <div><div class="placeholder">&nbsp&nbsp </div></div>
+           </div>
+			{/if}
+		{/if}
+           
+			 </form>
+            </div>
+ 
+        </div>
+		<br>
+<!-- 		<br>
+		  {if $vip}
+    <div class="weui-flex"> 
+            <div><div class="placeholder">&nbsp &nbsp </div></div>
+            <div class="weui-flex__item"><div class="placeholder">
+       <a href="javascript:window.location='{php echo $this->createMobileUrl('Mywz_add');}';"   class="btn btn-primary btn-lg btn-block"  > 自主创建文章</a>
+ 
+			</div></div>
+            <div><div class="placeholder">&nbsp&nbsp </div></div>
+  </div>
+  {else}
+  
+  <div class="weui-flex"> 
+            <div><div class="placeholder">&nbsp &nbsp </div></div>
+            <div class="weui-flex__item"><div class="placeholder">
+       <a href="javascript:window.location='{php echo $this->createMobileUrl('govip');}';"   class="btn btn-warning btn-lg btn-block"  > 自主创建文章[请升级VIP]</a>
+ 
+			</div></div>
+            <div><div class="placeholder">&nbsp&nbsp </div></div>
+  </div>
+  {/if}
+   -->
+ 
+  
+  
+</body>
+</html>

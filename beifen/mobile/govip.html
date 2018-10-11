@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>会员支付</title>
+</head>
+<script src="{MD_ROOT}static/js/rem.js"></script>
+<link rel="stylesheet" href="{MD_ROOT}static/css/base.css">
+<link rel="stylesheet" href="{MD_ROOT}static/css/govip.css">
+<style>
+   .cishu{
+       color: #979797;
+       font-size: .2rem;
+   }
+    .gonglue{
+        width: 95%;
+        text-align: center;
+        box-sizing: border-box;
+        background: #faf3cd;
+        border-radius: .3rem;
+        margin: 0 auto;
+        padding: .3rem;
+    }
+    .gonglue h3{
+        font-size: .3rem;
+        color: #000;
+        margin-bottom: .2rem;
+    }
+    .gonglue h5{
+        text-align: left;
+        color: #ea7221;
+    }
+</style>
+<body>
+    <div class="top-box">
+        <a class="top-left" href="{php echo $this->createMobileUrl('Mywzlist');}"><主页</a>
+        <p class="top-center">支付中心</p>
+    </div>
+    <!--用户信息-->
+    <div class="user-box">
+        <div class="user-pay">
+            <div class="user">
+                <?php if($data['logo']==''){$data['logo']='../addons/qidong_plp/css/yh.png';} ?>
+                <div class="user-img">
+                    <img src="{$user['logo']}" alt="" style="width: 100%;display: block;border-radius:50%">
+                </div>
+                <div class="user-xinxi">
+                    <div class="user-name">{$user['nickname']} </div>
+                    <div class="user-time">
+                        <i class="iconfont">&#xe60f;</i>
+                        <span style="color: #876534">到期时间:{php echo date('Y-m-d',$user['lasttime']);}</span>
+                    </div>
+
+                </div>
+                <i class=" iconfont zang">&#xe6fd;</i>
+            </div>
+        </div>
+    </div>
+    <!--vip类别-->
+    <div class="vip-box">
+        {loop $wxapp $index $nav}
+		<a href="{php echo $this->createMobileUrl('pay');}&fee={$nav['fee']}&pnum={$nav['pnum']}&days={$nav['days']}&title={$nav['title']}">
+        <div class="vip">
+            <div class="vip-item" style="color:#0e0903;font-weight: bold;font-size: .26rem">{$nav['title']} {$pnum}</div>
+            <div class="vip-item" style="color:#eccb62"> ¥{$nav['fee']}   </div>
+            <div class="cishu vip-item">立即节省{$nav['pnum']}元 </div>
+			
+ 	 </div>   </a> 
+        {/loop}
+    </div>
+    <!--攻略-->
+    <div class="gonglue">
+       <h3>VIP特权</h3>
+       <h5>          
+           1.实时查看谁看了我的文章<br>
+		   2.不限文章发布数量<br>
+           3.可编辑创建自己的文章<br>
+           4.可与文章读者实时沟通<br>
+           5.可使用个性名片模板<br>
+           6.可关闭底部推广广告<br>
+       </h5>
+    </div>
+    <!--div-->
+    <div style="margin-top: .5rem"></div>
+
+</body>
+</html>

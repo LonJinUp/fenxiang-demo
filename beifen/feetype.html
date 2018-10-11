@@ -1,0 +1,508 @@
+ {template 'common/header'}
+ 
+
+</style>
+  <ul class="nav nav-tabs">
+		<li class="{$active1}"><a href="{php echo $this->createWebUrl('set');}">系统设置</a></li>
+       <li class="{$active8}"><a href="{php echo $this->createWebUrl('feetype');}">收费设置</a></li>
+       <li class="{$active7}"><a href="{php echo $this->createWebUrl('payList');}">支付记录</a></li>  	
+	   <li class="{$active11}"><a href="{php echo $this->createWebUrl('bobao');}">播报设置</a></li>  
+		<li class="{$active10}"><a href="{php echo $this->createWebUrl('Userlist');}">用户列表</a></li>  	
+		<li class="{$active18}"><a href="{php echo $this->createWebUrl('Wenzhanglist');}">文章列表</a></li>  		
+</ul>
+ 
+  
+{if $active8== 'active'}
+<div class="clearfix" ng-controller="memberProperty" id="memberProperty">
+        <div class="panel panel-default">
+                <div class="panel-heading">
+                      产品列表  
+                </div>
+                <div class="panel-body">
+                        <table class="table table-hover">  
+                                <thead>  
+                                    <tr>  
+									
+									<th>名称</th>  
+                                    <th>价格</th> 
+									<th>节省</th>  
+                                    <th>时长</th> 					
+                                 
+									<th>操作</th>  
+                                    <th>操作</th>  
+									  
+                                    </tr>  
+                                </thead>  
+                                <tbody id="list">  
+								   
+                                     {loop $navmsg $index $items}
+                                    <tr>
+                                       
+									      <th>   {$items['title']}  </th>
+										  <th>  {$items['fee']}   </th>
+										   <th>  {$items['pnum']}  </th>
+										  <th>  {$items['days']}  </th>
+										 
+									      <th>   <a href="{php echo $this->createWebUrl($web)}&sid={$items['id']}"> 编辑 </a>  </th>
+                                        <th>
+										 
+                                            <form action="{php echo $this->createWebUrl($web)}" method="post">
+											
+											
+                                            <input type="hidden" name="id" value="{$items['id']}" />
+										
+                                            <input name="submit" type="submit" value="删除" class="btn btn-primary"> 
+										 
+                                            </form>
+                                        </th>
+										 
+								      </tr>
+                                    {/loop}
+                                </tbody>  
+                            </table>  
+            
+                </div>
+        </div>
+</div>
+
+<div class="clearfix" ng-controller="memberProperty" id="memberProperty">
+    <form action="{php echo $this->createWebUrl($web);}" method="post" class="form-horizontal">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+			{if $add}
+				编辑产品
+			{else}
+                添加产品
+			{/if}
+            </div>
+            <div class="panel-body">
+			 <label class="col-xs-12 col-sm-3 col-md-2 control-label">名称</label>
+                <div class="col-sm-9 col-xs-12">
+                    <input type="text" name="t[title]" value="{$s[0]['title']}" class="form-control">
+                    <span class="help-block">如:单日卡  包月卡  包年卡</span>
+                </div>
+				 <label class="col-xs-12 col-sm-3 col-md-2 control-label">时长</label>
+                <div class="col-sm-9 col-xs-12">
+                    <input type="text" name="t[days]" value="{$s[0]['days']}" class="form-control">
+                    <span class="help-block">VIP时长：填写数字 1～365 </span>
+                </div>
+				 <label class="col-xs-12 col-sm-3 col-md-2 control-label">节省多少钱</label>
+
+				 <div class="col-sm-9 col-xs-12">
+                    <input type="text" name="t[pnum]" value="{$s[0]['pnum']}" class="form-control">
+                    <span class="help-block">节省多少钱 </span>
+                </div>
+				 
+                 
+			
+                <label class="col-xs-12 col-sm-3 col-md-2 control-label">收费</label>
+                <div class="col-sm-9 col-xs-12">
+                       <input type="text" name="t[fee]" value="{$s[0]['fee']}" class="form-control">
+                    <span class="help-block">设置收费价格 </span>
+                    <span class="help-block"></span>
+                </div>
+				
+				 
+				
+				 
+               
+	 
+           
+            </div>
+        </div>
+             <div class="form-group col-sm-12">
+        <input type="hidden" name="insert" value="in" />
+		  <input type="hidden" name="bianji" value="{$bianji}" />
+		 <input type="hidden" name="id" value="{$s[0]['id']}" />
+        <input name="submit" type="submit" value="保存" class="btn btn-primary">
+    </div>
+    </form>
+</div>
+
+ 
+
+ {else}
+{/if}
+ 
+
+
+
+ {if $active7 == 'active'}
+<div class="clearfix" ng-controller="memberProperty" id="memberProperty">
+ 
+ 
+       
+   <div class="panel panel-default">
+                <div class="panel-heading">
+                    操作记录
+                </div>
+				 <div class="panel-body">
+	      <div class="form-group">
+              
+			  <table class="table table-hover">  
+			  <tr><th> 操作人 </th><th> 详情 </th> <th>  时间 </th>
+                             {loop $alllist $indexid $nav}
+						  <tr>  
+			             
+                            <th width=20%> {$nav['laiyuan']}</th> 
+							<th width=50%> {$nav['beizhu']}</th> 							  
+	
+							<th width=20%>   {php echo date('Y-m-d h:i:s',($nav['updatetime']));}</th> 	
+                           </tr>  	
+						     {/loop}
+                          
+                            </table> 
+		
+                <div class="form-controls col-sm-3 help-block">    </div>
+            </div>	 
+		 
+			
+	 
+			
+        </div>
+		
+		
+	 
+	 
+	 
+</div>
+{else}
+{/if}
+ 
+ {if $active9 == 'active'}
+<div class="clearfix" ng-controller="memberProperty" id="memberProperty">
+ 
+ 
+       
+   <div class="panel panel-default">
+                <div class="panel-heading">
+                    注册用户
+                </div>
+				 <div class="panel-body">
+	      <div class="form-group">
+              
+			  <table class="table table-hover">  
+			  <tr><th> 昵称 </th><th> VIP </th> 
+			  <th>  捡瓶子 </th><th>  扔瓶子 </th><th>  邮票 </th> <th>  时间 </th>
+                             {loop $alllist $indexid $nav}
+						  <tr>  
+			             
+                            <th width=20%> {$nav['nickname']}</th> 
+							<th width=10%> {$nav['vip']}</th> 							  
+							<th width=10%> {$nav['jnum']}</th> 
+							<th width=10%> {$nav['rnum']}</th> 
+							<th width=10%> {$nav['ypnum']}</th> 
+							<th width=30%> {php echo date('Y-m-d h:i:s',($nav['addtime']));}</th> 	
+                           </tr>  	
+						     {/loop}
+                          
+                            </table> 
+		
+                <div class="form-controls col-sm-3 help-block">    </div>
+            </div>	 
+		 
+			
+	 
+			
+        </div>
+		
+		
+	 
+	 
+	 
+</div>
+{else}
+{/if}
+ 
+ 
+  {if $active11 == 'active'}
+<div class="clearfix" ng-controller="memberProperty" id="memberProperty">
+ 
+ 
+       
+   <div class="panel panel-default">
+                <div class="panel-heading">
+                    播报记录
+                </div>
+				 <div class="panel-body">
+	      <div class="form-group">
+              
+			  <table class="table table-hover">  
+			  <tr><th> 操作人 </th><th> 详情 </th> <th>  时间 </th>
+                             {loop $wxapp $indexid $nav}
+						  <tr>  
+			             
+                            <th width=20%> {$nav['nickname']}</th> 
+							<th width=20%> {$nav['title']}</th> 							  
+	
+							<th width=20%>   {php echo date('Y-m-d h:i:s',($nav['addtime']));}</th> 
+							<th width=20%><a href="{php echo $this->createWebUrl('bobao');}&id={$nav['id']}&add=0"> 删除</a></th> 
+                           </tr>  	
+						     {/loop}
+                          
+                            </table> 
+		
+                <div class="form-controls col-sm-3 help-block">    </div>
+            </div>	 
+		 
+			
+	 
+			
+        </div>
+		
+	 
+	 
+	 
+	</div>
+</div>
+
+<div class="clearfix" ng-controller="memberProperty" id="memberProperty">
+    <form action="{php echo $this->createWebUrl('bobao');}" method="post" class="form-horizontal">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+		 
+            </div>
+            <div class="panel-body">
+			 <label class="col-xs-12 col-sm-3 col-md-2 control-label">内容</label>
+                <div class="col-sm-9 col-xs-12">
+                    <input type="text" name="t[title]" value=" " class="form-control">
+                    <span class="help-block">播报的内容</span>
+                </div>
+           
+            </div>
+        </div>
+             <div class="form-group col-sm-12">
+        <input type="hidden" name="add" value="1" />
+	 
+        <input name="submit" type="submit" value="保存" class="btn btn-primary">
+    </div>
+    </form>
+</div>
+
+ {/if}
+ 
+ 
+ {if $active10== 'active'}
+<div class="clearfix" ng-controller="memberProperty" id="memberProperty">
+        <div class="panel panel-default">
+                <div class="panel-heading">
+                      用户列表  
+                </div>
+                <div class="panel-body">
+                        <table class="table table-hover">  
+                                <thead>  
+                                    <tr>  
+									
+									<th>昵称</th>  
+                                    <th>openid</th> 
+									  <th>VIP</th>  
+                                    <th>到期</th> 					
+                                 
+									<th>操作</th>  
+                                  <th>操作</th>  
+									  
+                                    </tr>  
+                                </thead>  
+                                <tbody id="list">  
+								   
+                                     {loop $navmsg $index $items}
+                                    <tr>
+                                       
+									      <th>   {$items['nickname']}  </th>
+										  <th>  {$items['openid']}   </th>
+										   <th>  {$items['vip']}  </th>
+										  <th> {php echo date('Y-m-d h:i:s',($items['lasttime']));} </th>
+										 
+									      <th>   <a href="{php echo $this->createWebUrl($web)}&sid={$items['id']}"> 编辑 </a>  </th>
+                                        <th>
+										 
+                                            <form action="{php echo $this->createWebUrl($web)}" method="post">
+											
+											
+                                            <input type="hidden" name="id" value="{$items['id']}" />
+										
+                                            <input name="submit" type="submit" value="删除" class="btn btn-primary"> 
+										 
+                                            </form>
+                                        </th>
+										 
+								      </tr>
+                                    {/loop}
+                                </tbody>  
+                            </table>  
+            
+                </div>
+        </div>
+</div>
+
+<div class="clearfix" ng-controller="memberProperty" id="memberProperty">
+    <form action="{php echo $this->createWebUrl($web);}" method="post" class="form-horizontal">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+			{if $add}
+				编辑用户
+			{else}
+                添加用户
+			{/if}
+            </div>
+            <div class="panel-body">
+			 <label class="col-xs-12 col-sm-3 col-md-2 control-label">昵称</label>
+                <div class="col-sm-9 col-xs-12">
+                    <input type="text" name="t[nickname]" value="{$s[0]['nickname']}" class="form-control">
+                    <span class="help-block"> </span>
+                </div>
+				 <label class="col-xs-12 col-sm-3 col-md-2 control-label">VIP类型</label>
+                <div class="col-sm-9 col-xs-12">
+                    <input type="text" name="t[vip]" value="{$s[0]['vip']}" class="form-control">
+                    <span class="help-block">VIP：试用 | 正式 </span>
+                </div>
+				 <label class="col-xs-12 col-sm-3 col-md-2 control-label">到期时间</label>
+
+				 <div class="col-sm-9 col-xs-12">
+                   
+                 
+					
+					
+					<input type="text" name="lasttime"  value="{php echo date('Y-m-d',$s[0]['lasttime']);}" placeholder="请选择日期时间"   class="datetimepicker form-control" >
+  
+    <input type="hidden" name="id" value="{$id}" />
+										<script type="text/javascript">
+			require(["datetimepicker"], function(){
+					var option = {
+						lang : "zh",
+						step : 5,
+						timepicker : false,
+						closeOnDateSelect : true,
+						format : "Y-m-d"
+					};
+				$(".datetimepicker[name = 'lasttime']").datetimepicker(option);
+			});
+		</script>	  
+		   <span class="help-block"> </span>
+                </div>
+				 
+            
+	 
+           
+            </div>
+        </div>
+             <div class="form-group col-sm-12">
+        <input type="hidden" name="insert" value="in" />
+		  <input type="hidden" name="bianji" value="{$bianji}" />
+		 <input type="hidden" name="id" value="{$s[0]['id']}" />
+        <input name="submit" type="submit" value="保存" class="btn btn-primary">
+    </div>
+    </form>
+</div>
+
+ 
+
+ {else}
+{/if}
+
+
+ 
+ {if $active18== 'active'}
+<div class="clearfix" ng-controller="memberProperty" id="memberProperty">
+        <div class="panel panel-default">
+                <div class="panel-heading">
+                      文章列表  
+                </div>
+                <div class="panel-body">
+                        <table class="table table-hover">  
+                                <thead>  
+                                    <tr>  
+									
+									<th>发布人</th>  
+                                    <th>标题</th> 
+									  <th>阅读</th>  
+                                    <th>时间</th> 					
+                                 
+									<th>操作</th>  
+                                  <th>操作</th>  
+									  
+                                    </tr>  
+                                </thead>  
+                                <tbody id="list">  
+								   
+                                     {loop $navmsg $index $items}
+                                    <tr>
+                                       
+									      <th>   {$items['owner']}  </th>
+										  <th>
+										  <a target='_blank' href="{$website}/app/index.php?i={$_W[uniacid]}&c=entry&do=Mywz&m=huoban_mima&id= {$items['id']} "> 
+										  {$items['title']} </a>  </th>
+										   <th>  {$items['readnum']}  </th>
+										  <th> {php echo date('Y-m-d h:i:s',($items['addtime']));} </th>
+										 
+									      <th>   <a href="{php echo $this->createWebUrl($web)}&sid={$items['id']}"> 编辑 </a>  </th>
+                                        <th>
+										 
+                                            <form action="{php echo $this->createWebUrl($web)}" method="post">
+											
+											
+                                            <input type="hidden" name="id" value="{$items['id']}" />
+										
+                                            <input name="submit" type="submit" value="删除" class="btn btn-primary"> 
+										 
+                                            </form>
+                                        </th>
+										 
+								      </tr>
+                                    {/loop}
+                                </tbody>  
+                            </table>  
+            
+                </div>
+        </div>
+</div>
+
+<div class="clearfix" ng-controller="memberProperty" id="memberProperty">
+    <form action="{php echo $this->createWebUrl($web);}" method="post" class="form-horizontal">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+			{if $add}
+				编辑文章
+			{else}
+                添加文章
+			{/if}
+            </div>
+            <div class="panel-body">
+			 <label class="col-xs-12 col-sm-3 col-md-2 control-label">标题</label>
+                <div class="col-sm-9 col-xs-12">
+                    <input type="text" name="t[title]" value="{$s[0]['title']}" class="form-control">
+                    <span class="help-block"> </span>
+                </div>
+				 <label class="col-xs-12 col-sm-3 col-md-2 control-label">阅读</label>
+                <div class="col-sm-9 col-xs-12">
+                    <input type="text" name="t[readnum]" value="{$s[0]['readnum']}" class="form-control">
+                    <span class="help-block">VIP：试用 | 正式 </span>
+                </div>
+				 <label class="col-xs-12 col-sm-3 col-md-2 control-label">到期时间</label>
+
+				 <div class="col-sm-9 col-xs-12">
+                    <input type="text" name="t[lasttime]" value="{$s[0]['lasttime']}" class="form-control">
+                    <span class="help-block"> </span>
+                </div>
+				 
+            
+	 
+           
+            </div>
+        </div>
+             <div class="form-group col-sm-12">
+        <input type="hidden" name="insert" value="in" />
+		  <input type="hidden" name="bianji" value="{$bianji}" />
+		 <input type="hidden" name="id" value="{$s[0]['id']}" />
+        <input name="submit" type="submit" value="保存" class="btn btn-primary">
+    </div>
+    </form>
+</div>
+
+ 
+
+ {else}
+{/if}
+
+ 
+{template 'common/footer'}

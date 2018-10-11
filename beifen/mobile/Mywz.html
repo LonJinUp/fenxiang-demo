@@ -1,0 +1,136 @@
+<!doctype html>
+
+{if ($type=='微信' or $type=='原创')}
+<html>
+    <head>
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+ <link rel="stylesheet" href="{MD_ROOT}static/wx.css">
+{/if}
+{php echo register_jssdk(false);}
+
+ <script>
+        wx.ready(function () {
+            sharedata = {
+                title: '{$title}',
+                desc: '{$beizhu}',
+                link: '{$fxurl}',
+                imgUrl: '{$fxlogo}',
+                success: function(){
+                    alert('分享成功!');
+                },
+                cancel: function(){
+
+                }
+            };
+            wx.onMenuShareAppMessage(sharedata);
+        });
+    </script>
+        <script nonce="1362693516" type="text/javascript">
+            window.logs = {
+                pagetime: {}
+            };
+            window.logs.pagetime['html_begin'] = (+new Date());
+			var wztitle="{$wxapp[0]['title']}";
+			var wxopenid="{$mopenid}";
+			var wxnickname="{$nickname}";
+			var wxavatar="{$avatar}";
+			var wzid="{$wzid}";
+			var openkefu="{$wxapp[0]['openkefu']}";
+        </script>
+        <title> {$wxapp[0]['title']}</title>
+        
+
+ 
+{$detail}
+
+{if $bianji}
+
+<script>
+
+var openkefu="0";
+
+</script>
+<style>
+ 
+.right1 {
+    display: flex;
+    position: fixed;
+    bottom: 75px;
+    right: 0;
+    font-size: 15px;
+    height: 39px;
+    line-height: 39px;
+    z-index: 99;
+    background-color: rgba(255,130,71,.95);
+    border-radius: 20px 0 0 20px;
+    box-shadow: 0 1px 10px 1px rgba(59,107,174,.2);
+}
+.right2 {
+    display: flex;
+    position: fixed;
+    bottom: 35px;
+    right: 0;
+    font-size: 15px;
+    height: 39px;
+    line-height: 39px;
+    z-index: 99;
+    background-color: rgba(151,136,255,.95);
+    border-radius: 20px 0 0 20px;
+    box-shadow: 0 1px 10px 1px rgba(59,107,174,.2);
+}
+
+.logo1 {
+    width: 36px;
+    height: 100%;
+    background-image: url({MD_ROOT}static/img/bianji.png);
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
+    background-position: 13px 9px;
+    z-index: 1;
+}
+.logo2 {
+    width: 36px;
+    height: 100%;
+    background-image: url({MD_ROOT}static/img/fanhui.png);
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
+    background-position: 13px 9px;
+    z-index: 1;
+}
+.wenzi {
+    font-size: 14px;
+    color: #fff;
+    padding-right: 8px;
+    height: 100%;
+    left: 0;
+    display: inline-block;
+}
+</style>
+ 
+
+ <div class="right1">
+  <span class="logo1"></span>
+  <span class="wenzi">
+     <a href="{php echo $this->createMobileUrl('Mywz_edit');}&id={$id}"><font color=white> 编辑</font></a>
+  </span>
+  </div>
+  
+   <div class="right2">
+  <span class="logo2"></span>
+  <span class="wenzi">
+    <a href="{php echo $this->createMobileUrl('MywzList');}"> <font color=white> 返回</font></a>
+  </span>
+  </div>
+  
+
+{else}
+ <script  src="{$website}addons/huoban_mima/static/json/{$owner}.js"></script>
+ 
+{/if}
+
+ 

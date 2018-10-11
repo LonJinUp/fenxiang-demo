@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="initial-scale=1">
+    <script src="js/rem.js"></script>
+    <link rel="stylesheet" href="css/base.css">
+    <title>好友</title>
+</head>
+<style>
+    .top-box{
+        width: 100%;
+        box-sizing: border-box;
+        border-top:.02rem solid #f5f5f5;
+        border-bottom:.02rem solid #f5f5f5;
+        height:1.5rem;
+    }
+    .top-item{
+        float: left;
+        width: 33.33%;
+        height: 100%;
+        box-sizing: border-box;
+        border-right: .02rem solid #f5f5f5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .top-item:last-child{
+        border-right:none;
+    }
+    .top-con{
+        width: 80px;
+        height: 1rem;
+    }
+    .red{
+        color: #ff6026;
+        font-size: 16px;
+    }
+    .green{
+        color: #4272ae;
+        font-size: 14px;
+    }
+    .gray{
+        color: #a6a6a6;
+        font-size: 14px;
+    }
+    .top-con p{
+        width: 100%;
+        text-align: center;
+    }
+    .top-con a{
+        display: block;
+        width: 100%;
+        text-align: center;
+    }
+    .wechat-box{
+        width: 100%;
+        height: 1.2rem;
+        border-bottom: .02rem solid #f5f5f5;
+        box-sizing: border-box;
+        padding: .1rem .25rem;
+        display: flex;
+        align-items: center;
+    }
+    .logo-img-box{
+        border: .04rem solid #dcdada;
+        border-radius: 50%;
+        width: .8rem;
+        height: .8rem;
+        float: left;
+        margin-right: .4rem;
+    }
+    .logo-img-box img{
+        display: block;
+        width: .8rem;
+        height: .8rem;
+        border-radius: 50%;
+    }
+    .user-box{
+        float: left;
+        width: 50%;
+        height: 80%;
+    }
+    .user-box h3{
+        font-size: 14px;
+    }
+    .user-box p{
+        color: #797575;
+    }
+    .copy-btn{
+        width: 30%;
+        height: .6rem;
+        border: .02rem solid #6abb55;
+        color: #6abb55;
+        text-align: center;
+        line-height:.6rem;
+        border-radius: .15rem;
+    }
+    .document-box{
+        width: 100%;
+        box-sizing: border-box;
+        padding: .25rem;
+        overflow: hidden;
+    }
+    .document-box a{
+        display: block;
+        font-size: 16px;
+        color: #2a567b;
+        height: .6rem;
+    }
+    .warning{
+        width: 100%;
+        margin-top: .5rem;
+        text-align: center;
+    }
+    .warning p{
+        color: #797575;
+        font-size: 14px;
+    }
+
+</style>
+<body>
+<!--顶部-->
+    <div class="top-box">
+        <div class="top-item">
+            <div class="top-con">
+                <p class="red">5</p>
+                <p class="gray">今天看了</p>
+            </div>
+        </div>
+        <div class="top-item">
+            <div class="top-con">
+                <p class="red">18</p>
+                <p class="gray">看我总数</p>
+            </div>
+        </div>
+        <div class="top-item">
+            <div class="top-con">
+                <a href="" class="gray">立即提醒</a>
+                <a href="" class="green">提醒设置</a>
+            </div>
+        </div>
+    </div>
+<!--微信好友-->
+    <div class="wechat-box">
+        <div class="logo-img-box">
+            <img src="image/logo-mob.jpeg" alt="">
+        </div>
+        <div class="user-box">
+            <h3 id="c">贝壳管理员</h3>
+            <p>看了3篇文章,3次</p>
+        </div>
+        <div class="copy-btn">复制微信名</div>
+    </div>
+<!--教程-->
+    <div class="document-box">
+        <a href="">微信名搜不到好友?</a>
+        <a href="">无法复制微信名?</a>
+    </div>
+<!--会员提示-->
+    <div class="warning">
+        <p class="">开通高级会员之前看你的客户不会显示</p>
+        <p>开通之后再看你的客户就会出现在这里</p>
+    </div>
+</body>
+<script src="js/jquery-3.1.1.min.js"></script>
+<script src="js/clipboard.js"></script>
+<script>
+
+    var c = document.getElementById("c");
+    var s=c.innerHTML;
+    var clipboard = new Clipboard('.copy-btn', {
+        text: function() {
+            return s;
+        }
+    });
+    clipboard.on('success', function(e) {
+        alert("复制成功");
+    });
+
+    clipboard.on('error', function(e) {
+        console.log(e);
+    });
+</script>
+</html>

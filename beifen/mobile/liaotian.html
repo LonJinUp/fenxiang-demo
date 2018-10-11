@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,minimum-scale=1,user-scalable=no">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="email=no" name="format-detection">
+    <title>和粉丝{$toname}的聊天</title>{php echo register_jssdk(false);}
+    <script src='{MD_ROOT}static/js/socket.io.js'></script>
+    <script src="{MD_ROOT}static/js/jquery-1.8.3.min.js"></script>
+    <script src="{MD_ROOT}static/js/vendor/jquery.ui.widget.js"></script>
+    <script src="{MD_ROOT}static/js/jquery.iframe-transport.js"></script>
+    <script src="{MD_ROOT}static/js/jquery.fileupload.js"></script>
+    <script src="{MD_ROOT}static/wjlx.js"></script>
+    <script src="{MD_ROOT}static/index.js"></script>
+    <link rel="stylesheet" href="{MD_ROOT}static/newui/css/reset.css" />
+    <link rel="stylesheet" href="{MD_ROOT}static/weui.css">
+    <link rel="stylesheet" href="{MD_ROOT}static/emoji/emoji.css" />
+    <link rel="stylesheet" href="{MD_ROOT}static/nchat1.css" />
+    <link rel="stylesheet" href="{MD_ROOT}static/iconfont/iconfont.css" />
+    <link rel="stylesheet" href="{MD_ROOT}static/newui/css/style.css" />
+    <script type="text/javascript">var admin = "{$admin}";
+      var sharedata;
+      var pagecount = 0;
+      var page = 999;
+      var jishiqi;
+      var webname = "{$webname}";
+      var yyname = webname;
+      var jsonid = "{$jsonid}";
+      var kfname = "{$kfname}";
+      var head_img = "{$avatar}";
+	    var wzid = "{$wzid}";
+      var gao = 7.5;
+      var ispc = 0;
+      var deviceWidth = document.documentElement.clientWidth;
+      document.documentElement.style.fontSize = deviceWidth / gao + 'px';</script>
+    <style>.hide{ display:none; } .blackbg { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #000; opacity: 0.3; z-index: 9998; }.pingjiacss{position:fixed;z-index:999;width:80%;left:10%;background:#fff;top:10%;}.pingjiacss .flex{padding:0.2rem;}.pingjiacss .flex .pingtype{flex:1;background:#f2f2f2;padding:0.1rem 0;font-size:0.6rem;text-align:center;margin:0 0.2rem;color:#666;}.pingjiacss .flex .nowpingtype{background:#4caf50;color:#fff;}.pingjiacss .flex .nowpingtype1{background:#2196f3;color:#fff;}.pingjiacss .flex .nowpingtype2{background:#E64340;color:#fff;}.pingjiacss .textarea{padding:0.2rem;background:#fff;}.pingjiacss .textarea textarea{display:block;width:100%;border:none;height:1.6rem;padding:0;font-size:0.3rem;color:#666;padding:0.1rem 0;border:solid 1px #f1f1f1;-webkit-appearance: none;}.pingjiacss button{display:block;width:100%;height:0.8rem;line-height:0.8rem;text-align:center;border:none;background:#f2f2f2;font-size:0.6rem;border-top:solid 1px #DFDFDF;color:#E64340;}.pingjiacss .flex .nowpingtype{background:{$setting['temcolor']};color:#fff;}.pingjiacss button{color:{$setting['temcolor']};}</style></head>
+  
+  <body class="chat" style="background-image:url({$beijingpic});background-repeat:no-repeat; background-size:100% 100%;-moz-background-size:100% 100%;">
+    <!--录音区域-->
+    <div class="mask hide"></div>
+    <div class="fix fx-audio hide">
+      <i class="audio-start bigvoice"></i>
+      <p>按住此区域语音</p>
+      <p>系统自动识别请用普通话</p>
+    </div>
+    <div>
+      <!--消息内容-->
+      <div class="chat-content" id="messagelist" style="-webkit-overflow-scrolling:touch;">
+        <script>var userId = "{$topenid}";</script>
+        <div id="msglist{$topenid}" class="main">
+          <div id='jiazaijilu' class="chat-msg">
+            <!-- <div class="time">              <a href="javascript:void(0);" data-i='+msg.fopenid+' onclick="readmsg(page)" id="jiazai">查看记录</a></div> -->
+          </div>
+          <!-- 加载部分聊天记录1 --></div>
+      </div>
+      <div class="send-list hide">
+        <div class="emoji_panel">
+          <ul class="exp_hd">
+            <li class="exp_hd_item active" data-i="0">
+              <a href="javascript:;">发图片</a></li>
+          </ul>
+          <div class="exp_bd">
+            <div class="exp_cont active">
+              <div class="weui-uploader__input-box">
+                <input id="fileupload" class="weui-uploader__input" type="file" accept="image/*" data-url="{MD_ROOT}/upload/server/php/" multiple=""></div>
+            </div>
+            <div class="exp_cont "></div>
+          </div>
+        </div>
+      </div>
+      <!--微信内有俩按钮 否则无-->{if $f!='pc1'}
+      <div class="chat-input" style="background-color:{$s['liao_dibugrb']};">
+        <div class="quickandvoice">
+          <div class="audio"></div></div>
+        <div class="sendvioce hide">&nbsp&nbsp&nbsp按住 说话</div>
+        <div class="input">
+          <textarea style="background-color:{$s['liao_shurugrb']};overflow:hidden;" type="text" class="cell input-txt" id="chatcontent" placeholder="请输入聊天内容..."></textarea>
+        </div>
+        <div class="other">
+          <div class="jia"></div>
+          <div style="background-color:{$s['liao_sendgrb']};color:{$s['liao_sendwzgrb']}" class="send " id="btnSend">发送</div>
+          <div id="shandong" class="quick"></div>
+        </div>
+      </div>{else}
+      <div class="chat-input" style="background-color:{$s['liao_dibugrb']};">
+        <div class="quickandvoice">
+          <div class="audio"></div></div>
+        <div class="inputone">
+          <textarea style="background-color:{$s['liao_shurugrb']};" type="text" onkeydown="KeyDown(event)" class="cell input-txt" id="chatcontent" placeholder="请输入内容..."></textarea>
+        </div>
+        <div class="other">
+          <div class="jia"></div>
+          <div style="background-color:{$s['liao_sendgrb']};color:{$s['liao_sendwzgrb']}" class="send" id="btnSend">发送</div>
+          <div id="shandong" class="quick"></div>
+        </div>
+      </div>{/if}</div>
+    <!--发送图片-->
+    <!--快捷回复-->
+    <div class="quick-list hide">
+      <ul id="nav">{loop $userlist $index $nav}
+        <a style="text-decoration:none;" id="{$nav['gopenid']}" moshi="0" href='javascript:void(0);' onclick='setidTop(this)'>
+          <div class="weui-cell">
+            <div class="weui-cell__hd" style="position: relative;margin-right: 10px;">
+              <img src="{$nav['avartar']}" style="width: 50px;display: block">
+              <span class="weui-badge" style="position: absolute;top: -.4em;right: -.4em;"></span></div>
+            <div class="weui-cell__bd">
+              <p>{$nav['nickname']}</p>
+              <p id="online" style="font-size: 13px;color: #888888;">在线</p></div>
+          </div>
+        </a>{/loop}</ul>
+    </div>
+    <input type="hidden" id="toopenid" value="{$cservice['content']}" />
+    <input type="hidden" id="timestamp" value="{$timestamp}" />
+<script type="text/javascript">
+var images = {
+    localIds: [],
+  };
+  var voice = {
+    localId: '',
+    serverId: ''
+  };
+  $(function() {
+    var vip = "{$vip}";
+    $('.sendvioce').on('touchstart',
+    function(event) {
+      if (vip == 0) {
+       // alert('仅限VIP');
+        //return false;
+      }
+      $('.sendvioce').text('松开 结束');
+      $('.sendvioce').addClass("greys");
+      event.preventDefault();
+      START = new Date().getTime();
+      recordTimer = setTimeout(function() {
+        wx.startRecord({
+          success: function() {
+            localStorage.rainAllowRecord = 'true';
+          },
+          cancel: function() {
+            alert('您拒绝授权录音');
+          }
+        });
+      },
+      300);
+    });
+    $('.sendvioce').on('touchend',
+    function(event) {
+      $('.sendvioce').text('按住 说话');
+      $('.sendvioce').removeClass("greys");
+      event.preventDefault();
+      END = new Date().getTime();
+      if ((END - START) < 300) {
+        END = 0;
+        START = 0;
+        alert('录音时间太短');
+        clearTimeout(recordTimer);
+      } else {
+        wx.stopRecord({
+          success: function(res) {
+            voice.localId = res.localId;
+            wx.translateVoice({
+              localId: res.localId,
+              isShowProgressTips: 1,
+              success: function(res) {
+                if (res.translateResult != null) {
+                  sendMsg(res.translateResult, 'text')
+                };
+              }
+            });
+          },
+          fail: function(res) {
+            alert('录音失败');
+          }
+        });
+      }
+    });
+    function uploadVoice() {
+      wx.uploadVoice({
+        localId: voice.localId,
+        isShowProgressTips: 1,
+        success: function(res) {
+          console.log(res.serverId);
+          var returnmsg = getsendtext('right', avatar, 'voice', res.serverId, '我');
+          $('#msglist' + userId).append(returnmsg);
+          $('#messagelist').animate({
+            scrollTop: 10000000
+          },
+          300);
+        }
+      });
+    }
+  });
+  //-----------------------------
+  $(function() {
+    $('#fileupload').fileupload({
+      dataType: 'json',
+      acceptFileTypes: /(.|\/)(jpe?g|png|zip|doc|avi|mp3)$/i,
+      maxNumberOfFiles: 1,
+      maxFileSize: 5000000,
+      add: function(e, data) {
+        var count = data.files.length;
+        var i;
+        for (i = 0; i < count; i++) {
+          var name = data.files[i].name;
+          var index = name.lastIndexOf(".") + 1;
+          var fileType = name.substring(index, name.length);
+          data.files[i].uploadName = Math.floor(Math.random() * 1000) + '_.' + fileType;
+        }
+        data.submit();
+      },
+      done: function(e, data) {
+        $.each(data.result.files,
+        function(index, file) {
+          if (moshi == 1) {
+            var imageurl = "/temp/" + file.name;
+          } else {
+            var imageurl = website + "/addons/qidong_plp/temp/" + file.name;
+          }
+          var imgtype = "image";
+          if (typeMatch(imgExt, file.name)) {
+            imgtype = "image";
+          } else {
+            imgtype = "other";
+          }
+          sendMsg(imageurl, imgtype);
+        });
+      },
+      progressall: function(e, data) {
+        var progress11 = parseInt(data.loaded / data.total * 100, 10);
+        var $progress = $('.js_progress');
+        $progress.show();
+        $progress.css({
+          width: progress11 + '%'
+        });
+        if (progress11 == 100) {
+          $progress.hide();
+        }
+      }
+    });
+  });
+  </script>
+  
+<script type="text/javascript">var windowHeight = $(window).height();
+  var datamsg = '';
+  var chatHeight = $(".main").height();
+  var qita = "{$qita}";
+  console.log("success");
+  $(function() {
+    domInit(gao);
+    $(".chat-content").on("click",
+    function() {
+      $(".send-list").addClass("hide");
+      $(".quick-list").addClass("hide");
+    });
+    $(".quick").on("click",
+    function() {
+      window.location.href = "{php echo $this->createMobileUrl('myplp')}";
+      return false;
+      $(".send-list").addClass("hide");
+      if ($(".quick-list").hasClass("hide")) {
+        $(".quick-list").removeClass("hide");
+      } else {
+        $(".quick-list").addClass("hide")
+      }
+    });
+    $(".jia").on("click",
+    function() {
+      return false;
+      $(".quick-list").addClass("hide");
+      if ($(".send-list").hasClass("hide")) {
+        $(".send-list").removeClass("hide");
+      } else {
+        $(".send-list").addClass("hide")
+      }
+    });
+    $(".kefu").on("click",
+    function() {
+      if ($(".quick-list").hasClass("hide")) {
+        $(".quick-list").removeClass("hide");
+      } else {
+        $(".quick-list").addClass("hide")
+      }
+    });
+    $(".send").on("click",
+    function() {
+      if (admin != '') {
+        if ($('#online').prop('checked') == true && $('#chatcontent').val() == '' && $('#chatcontent').attr('placeholder') != '请输入回复内容...') {
+          var txt = $('#chatcontent').attr('placeholder');
+          $('#chatcontent').val(txt);
+        }
+      }
+      if ($('#chatcontent').val() == '') {
+        return false;
+      }
+      sendMsg($('#chatcontent').val(), 'text');
+      $('#chatcontent').val("");
+      if (admin != '') {
+        $('#chatcontent').attr('placeholder', '请输入回复内容...');
+      }
+    });
+    var iswx = 1;
+    $(".audio").on("click",
+    function() {
+      console.log("iswx:" + iswx);
+      if (iswx == 1) {
+        if ($(".input").hasClass("hide")) {
+          $(".input").removeClass("hide");
+          $(".sendvioce").addClass("hide");
+          $(".send").css('display', 'block');
+          $(".other").css('width', '2.8rem');
+        } else {
+          $(".input").addClass("hide");
+          $(".sendvioce").removeClass("hide");
+          $(".send").css('display', 'none');
+          $(".other").css('width', '2.0rem');
+        }
+      } else {
+        alert('只能在微信内发送语音');
+      }
+    });
+    $(".mask").on("click",
+    function() {
+      $(".mask,.fix,.fsz").addClass("hide");
+    });
+    $(".pingtype").click(function() {
+      $(".pingtype").removeClass('nowpingtype');
+      $(".pingtype").removeClass('nowpingtype1');
+      $(".pingtype").removeClass('nowpingtype2');
+      if ($(this).attr('data-val') == 10) {
+        $(this).addClass('nowpingtype');
+      } else if ($(this).attr('data-val') < 5) {
+        $(this).addClass('nowpingtype2');
+      } else {
+        $(this).addClass('nowpingtype1');
+      }
+      $("#pingtype").val($(this).attr('data-val'));
+    });
+    $("#pingjiabtn").click(function() {
+      $.ajax({
+        url: "{php echo $this->createMobileUrl('addpingjia')}",
+        type: 'post',
+        data: {
+          jsonid: jsonid,
+          kfopenid: userId,
+          kfname: kfname,
+          khname: nickname,
+          khopenid: uid,
+          pingtype: $("#pingtype").val(),
+          content: $("#pingjiacon").val(),
+        },
+        dataType: 'json',
+        success: function(data) {
+          if (data.error == 0) {
+            window.alert(data.msg);
+            $('.blackbg,.pingjiacss').addClass('hide');
+            sendMsg('您收到了一个评价', 'text');
+          } else {
+            window.alert(data.msg);
+          }
+        }
+      });
+    });
+  });
+  console.log("success-0");
+  function domInit(gaodu) {
+    var chatContentHeight = windowHeight - deviceWidth / gaodu * 1;
+    $(".chat-content").css({
+      "height": chatContentHeight
+    });
+    $(".chat-content").animate({
+      scrollTop: chatHeight
+    },
+    500);
+  }
+  function run() {
+    var pic = document.getElementById('shandong');
+    var status = 1;
+    if (status == 1) {
+      pic.style.display = 'block';
+      status = 0;
+    } else {
+      pic.style.display = 'none';
+      status = 1;
+    }
+  }</script>
+<script type="text/javascript">var zslist = "{$zs}";
+  var tslist = "{$ts}";
+  console.log("zslist:" + zslist);
+  console.log("tslist:" + tslist);
+  $('#kshuifu').html(zslist);
+  $('#zhuanjie').html(tslist);
+  var online = true;
+  var uid = "{$openid}";
+  var userId = "{$topenid}";
+  var moshi = 0;
+  var nickname = "{$nickname}";
+  var avatar = "{$avatar}";
+  var khname;
+  var mang = "{$datas['mang']}";
+  var kaishi = "{$datas['kaishi']}";
+  var ltlist = "";
+  var xiaoxi = "";
+  var jid = "{$jid}";
+  var khlx = "{$khlx}";
+  var website = "{$website}";
+  var xuhao = 0;
+  var oavatar = "{$kfavatar}";
+  var mdaohang;
+  function readmsg(nowpage) {
+    var vip = "{$vip}";
+    if (vip == 0) {
+      //alert('仅限VIP');
+      //return false;
+    }
+    console.log('page:' + nowpage);
+    if (nowpage < 1) {
+      $('#jiazai').text("已无更多记录");
+      console.log('结束');
+      return false;
+    }
+    if (nowpage == 999) {
+      nowpage = 0;
+    }
+    if (admin == "") {
+      var khopenid1 = "{$openid}";
+    } else {
+      var khopenid1 = userId;
+    }
+    var pzid = "{$wzid}";
+    $.ajax({
+      url: "{php echo $this->createMobileUrl('lishijilu')}",
+      data: {
+        jsonid: jsonid,
+        khopenid: khopenid1,
+        pzid: pzid,
+        page: nowpage
+      },
+      dataType: 'json',
+      type: 'post',
+      success: function(data1) {
+        page = data1.page - 1;
+        $('#jiazai').text("历史记录：还有" + page + "页");
+        console.log('bakpage:' + page);
+        console.log('jsonid:' + jsonid);
+        console.log('khopenid1:' + khopenid1);
+        data1.list.reverse();
+        $.each(data1.list,
+        function(i, item) {
+          var inmsg;
+          if (item.type == "") {
+            item.type = 'text';
+          }
+          if (item.type == 'link') {
+            item.keyword = '图文消息';
+          }
+          if (item.khname == "{$toname}") {
+            var omsg = 'right';
+            var omsg1 = 'message me';
+            var oname = item.khname;
+            var mavatar = avatar;
+            var timemsg = '	<div class="time"> ' + timestampToTime(item.updatetime) + '</div>';
+            $('#jiazaijilu').after(timemsg).animate({
+              scrollTop: 0
+            },
+            300);
+          } else {
+            var omsg = 'left';
+            var omsg1 = 'message';
+            var oname = item.kfname;
+            var mavatar = "{$toavatar}";
+          }
+          var returnmsg = getsendtext(omsg, mavatar, item.type, item.keyword, oname);
+          $('#jiazaijilu').after(returnmsg).animate({
+            scrollTop: 0
+          },
+          300);
+        });
+      },
+    });
+  }
+  function timestampToTime(timestamp) {
+    var date = new Date(timestamp * 1000);
+    Y = date.getFullYear() + '-';
+    M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+    D = date.getDate() + ' ';
+    h = date.getHours() + ':';
+    m = (date.getMinutes() + 1 < 10 ? '0' + (date.getMinutes() + 1) : date.getMinutes()) + ':';
+    s = date.getSeconds();
+    return Y + M + D + h + m + s;
+  }
+  function call_back0(msg) {
+    console.log(msg);
+  }
+  function call_back(msg) {
+    console.log(msg);
+    if (msg['code'] == 1) {
+      online = true;
+      console.log(userId);
+      var b = userId.charAt(0);
+      var tz = "";
+      var tongzhi = "";
+      var ypnum = "{$ypnum}";
+      if (ypnum < 1) {
+        alert("邮票数量不足，不能发送聊天请求。");
+        return false;
+      }
+      if (b == 'o' && qita != "APP") {
+        $.ajax({
+          url: "{php echo $this->createMobileUrl('sendmbmsg')}" + "&khlx=" + khlx,
+          data: {
+            jsonid: jsonid,
+            khopenid: uid,
+            keyword: " " + msg['content'],
+            kfname: "{$nickname}",
+            toopenid: userId,
+            khname: "kh",
+            yyname: webname,
+            jid: jid,
+			wzid: wzid,
+            admin: admin
+          },
+          dataType: 'json',
+          type: 'post',
+          success: function(data1) {
+            tongzhi = "已通知到微信，请稍等。";
+            console.log(tongzhi);
+          },
+        });
+      }
+      if (qita != "APP") {
+        online = false;
+        tz = '对方不在线，已微信通知，请稍等...' + tongzhi;
+        var returnmsg = getsendtext('left', head_img, 'text', tz, '系统提示');
+        $('#msglist' + userId).append(returnmsg);
+        $('#messagelist').animate({
+          scrollTop: 10000000
+        },
+        300);
+      }
+    }
+  }
+  function KeyDown(event) {
+    if (event.keyCode == 13) {
+      event.returnValue = false;
+      event.cancel = true;
+      if ($('#chatcontent').val() != "") {
+        sendMsg($('#chatcontent').val(), 'text');
+        $('#chatcontent').val("");
+      }
+    }
+  }</script>
+<script type="text/javascript">$(document).ready(function() {
+    $("button").click(function() {
+      $("#" + userId).remove();
+    });
+  });
+  function setonline(obj) {
+    var thisObj = $(obj);
+    var isChecked = thisObj.prop('checked');
+    if (isChecked) {
+      online = true;
+    } else {
+      online = false;
+    }
+  }
+  function setid(obj) {
+    var thisObj = $(obj);
+    userId = thisObj.attr("tid");
+    moshi = thisObj.attr("moshi");
+    jsonid = thisObj.attr("jsonid");
+    document.getElementById("editArea").focus();
+    $("#" + userId).attr({
+      "style": "color:red;font-weight:bold;"
+    });
+    thisObj.attr({
+      "style": "color:red;font-weight:bold;"
+    });
+  }
+  function setidTop(obj) {
+    var thisObj = $(obj);
+    userId = thisObj.attr("id");
+    moshi = thisObj.attr("moshi");
+    jsonid = thisObj.attr("jsonid");
+    khavatar = thisObj.attr("khavatar");
+    khname = thisObj.attr("khname");
+    var khsay = $("#end" + userId).text();
+    if (ispc == 1) {
+      document.getElementById("chatcontent").focus();
+    }
+    $("a").attr({
+      "style": "color:black; text-decoration:none;"
+    });
+    $("#" + userId).attr({
+      "style": "color:red;font-weight:bold;"
+    });
+    thisObj.attr({
+      "style": "color:red;font-weight:bold;"
+    });
+    console.log('userid:' + userId + 'moshi:' + moshi + 'jsonid:' + jsonid + 'khname:' + khname);
+    online = true;
+    $('#wd' + thisObj.attr("id")).html("0");
+    i = thisObj.data('i');
+    $('.main').addClass('main hide');
+    $('.main').eq(i).removeClass('hide');
+    $('#messagelist').animate({
+      scrollTop: 10000000
+    },
+    300);
+    if (admin != '') {
+      sharedata = {
+        title: '客服转接通知,点击立即接待.',
+        desc: '客户昵称：[' + khname + '] 咨询:' + khsay,
+        link: '{$weburl}&zhijie=2&' + '&topenid=' + userId + '&jid=' + jid + '&moshi=' + moshi,
+        imgUrl: khavatar,
+        success: function() {},
+        cancel: function() {}
+      }
+    } else {
+      sharedata = {
+        title: webname + '客服中心',
+        desc: '客服[' + kfname + ']不错,给好评！',
+        link: '{$_W["siteurl"]}',
+        imgUrl: avatar,
+        success: function() {},
+        cancel: function() {}
+      }
+    }
+    wx.onMenuShareAppMessage(sharedata);
+    wx.onMenuShareTimeline(sharedata);
+  }
+  function setidTop1(obj) {
+    var thisObj = $(obj);
+    userId = thisObj.attr("id");
+    moshi = thisObj.attr("moshi");
+    document.getElementById("chatcontent").focus();
+    $("#" + userId).attr({
+      "style": "color:red;font-weight:bold;"
+    });
+    thisObj.attr({
+      "style": "color:red;font-weight:bold;"
+    });
+    console.log('userid:' + userId + 'moshi:' + moshi + 'jsonid:' + jsonid);
+    sendMsg('你好,在吗?', 'text');
+  }
+  function openidTop(obj) {
+    var thisObj = $(obj);
+    $("div.box_bd").attr({
+      "style": "visibility:none"
+    });
+    $("#" + thisObj.attr("id")).attr({
+      "style": "visibility:inline;"
+    });
+    online = true;
+  }
+  console.log("begin");
+  $(document).ready(function() {
+    pmsg = "{$msg}";
+    uid = "{$openid}";
+    var nickname = "{$nickname}";
+    var avatar = "{$avatar}";
+    var socket = io('https://web.17cheng.cn:2120');
+    socket.on('connect',
+    function() {
+      socket.emit('login', {
+        'uid': uid,
+        'admin': admin,
+        'userId': userId,
+        'nickname': nickname,
+        'avatar': avatar,
+        'yyname': yyname,
+        'jsonid': jsonid
+      });
+    });
+    var tz = "{$tz}";
+    if (tz == 1) {
+      $.ajax({
+        async: false,
+        url: "https://web.17cheng.cn:2121/?type=publish&to=" + userId,
+        type: 'get',
+        data: {
+          content: nickname + '上线了.',
+          msgtype: "text",
+          ytime: "",
+          fopenid: uid,
+          avatar: avatar,
+          nickname: nickname,
+          website: website,
+          jsonid: jsonid
+        },
+        dataType: 'jsonp',
+        jsonpCallback: 'call_back0',
+        success: function(json) {
+          console.log("success");
+        },
+        error: function(json) {
+          console.log("error");
+        }
+      });
+    }
+    socket.on('new_msg',
+    function(msg) {
+      online = true;
+      console.log('fopenid:' + msg.fopenid);
+      var qiehuan = "";
+      var qiehuanMe = "";
+      var msgbox = "";
+      khname = msg.nickname;
+      oavatar = msg.avatar;
+      if (msg.yyname == null) {
+        msg.yyname = "";
+      };
+      if (msg.jsonid == null) {
+        msg.jsonid = "";
+      };
+      var tx = "";
+      if (msg.fopenid != userId) {
+        qiehuan = "<a   id='" + msg.fopenid + "' moshi='" + msg.moshi + "' href='javascript:void(0);' onclick='setid(this)'jsonid='" + msg.jsonid + "' >" + msg.nickname + msg.yyname + "【待接入】</a>";
+        if (msg.nickname == '') {
+          msg.nickname = '用户';
+        }
+        if (ltlist.match(msg.fopenid) == null) {
+          $(".quick-list").removeClass("hide");
+          xuhao = xuhao + 1;
+          if (msg.avatar == '') {
+            msg.avatar = '../addons/qidong_plp/css/yh.png';
+          }
+          qiehuanMe = ' <a style="text-decoration:none;" data-i=' + xuhao + ' id="' + msg.fopenid + '"  jsonid="' + msg.jsonid + '" khname="' + msg.nickname + '" khavatar="' + msg.avatar + '"  moshi="' + msg.moshi + '" href="javascript:void(0);" onclick="setidTop(this)" > ' + '			<div class="weui-cell">' + '	  <div class="weui-cell__hd" style="position: relative;margin-right: 10px;">' + '	      <img src="' + msg.avatar + '" style="width: 50px;display: block">' + '	      <span id="wd' + msg.fopenid + '" class="weui-badge" style="position: absolute;top: -.4em;right: -.4em;">1</span>' + '	</div>               <div class="weui-cell__bd">' + '			<p id="nk' + msg.fopenid + '">' + msg.nickname + '</p>' + '	<p id="end' + msg.fopenid + '" style="font-size: 13px;color: #888888;">' + msg.content.substring(0, 10) + '</p>' + '	</div>            </div></a>   ';
+          msgbox = '<div  id="msglist' + msg.fopenid + '"   class="main hide"> 	<div  id="jiazaijilu' + msg.fopenid + '" class="chat-msg" >	<div   class="time"><a href="javascript:void(0);" data-i=' + msg.fopenid + ' onclick="readmsg(page)" id="jiazai">和' + msg.nickname + '的聊天</a></div>	</div></div>';
+          $('#messagelist').append(msgbox).animate({
+            scrollTop: 10000000
+          },
+          300);
+          ltlist = ltlist + msg.fopenid;
+          $('#nav').prepend(qiehuanMe).animate({
+            scrollTop: 10000000
+          },
+          300);
+          console.log(ltlist);
+        } else {
+          console.log('@' + msg.content.substring(0, 10));
+          $('#end' + msg.fopenid).html(msg.content.substring(0, 10));
+          var weidumsg = $('#wd' + msg.fopenid).text().trim();
+          var weidushu = parseInt(weidumsg) + 1;
+          $('#wd' + msg.fopenid).html(weidushu + "");
+        }
+      } else {
+        console.log('@@' + msg.content.substring(0, 10));
+        $('#end' + msg.fopenid).html(msg.content.substring(0, 10));
+        var weidumsg = $('#wd' + msg.fopenid).text().trim();
+        var weidushu = parseInt(weidumsg) + 1;
+        $('#wd' + msg.fopenid).html(weidushu + "");
+      };
+      if (userId == msg.fopenid) {
+        userId = msg.fopenid;
+        moshi = msg.moshi;
+        jsonid = msg.jsonid;
+        qiehuan = "<a jsonid='" + msg.jsonid + "' style='color:red' tid='" + msg.fopenid + "' moshi='" + msg.moshi + "' href='javascript:void(0);' onclick='setid(this)' >【" + xuhao + "】" + msg.nickname + msg.yyname + " </a>";
+      } else {
+        qiehuan = "<a jsonid='" + msg.jsonid + "'  tid='" + msg.fopenid + "' moshi='" + msg.moshi + "' href='javascript:void(0);' onclick='setid(this)' >【" + xuhao + "】" + msg.nickname + msg.yyname + " </a>";
+      };
+      var myDate = new Date();
+      var inmsg;
+      console.log("msgtype:" + msg.msgtype);
+      if (msg.msgtype == "") {
+        msg.msgtype = 'text';
+      }
+      tx = msg.content;
+      if (msg.msgtype == 'link') {
+        msg.content = escape2Html(msg.content);
+        tx = '您收到一个图文消息';
+      }
+      if (msg.msgtype == 'image') {
+        tx = '您收到一个图片';
+      }
+      playvoice(tx);
+      if (window.Notification && Notification.permission !== "denied") {
+        Notification.requestPermission(function(status) {
+          var n = new Notification(msg.yyname + msg.nickname, {
+            body: tx,
+            icon: msg.avatar
+          });
+        });
+      }
+      var returnmsg = getsendtext('left', msg.avatar, msg.msgtype, msg.content, msg.nickname);
+      var myDate = new Date();
+      var shijian = '<div class="time">' + myDate.toLocaleTimeString() + '</div>';
+      $('#msglist' + msg.fopenid).append(shijian);
+      $('#msglist' + msg.fopenid).append(returnmsg);
+      $('#messagelist').animate({
+        scrollTop: 10000000
+      },
+      300);
+    });
+    socket.on('update_online_count',
+    function(online_stat) {
+      $('#online_box').html(online_stat);
+    });
+  });
+  var voice = function() {
+    var audio = document.createElement("audio");
+    audio.src = "{MD_ROOT}/css/default.mp3";
+    audio.play();
+  };
+  var playvoice = function(yuyin) {
+    if ($('#openvioce').prop('checked') == true) {
+      $.ajax({
+        url: website + "/addons/qidong_app_plugin_wx/QQapi.php",
+        data: {
+          a: "j",
+          keyword: yuyin
+        },
+        dataType: 'json',
+        type: 'post',
+        success: function(data1) {
+          var audio = document.createElement("audio");
+          audio.src = "data:audio/wav;base64," + data1.data;
+          audio.play();
+        },
+      });
+    } else {}
+  };
+  function jiqiren(yuyin) {
+    console.log("hech:" + yuyin);
+    $.ajax({
+      url: website + "/addons/qidong_app_plugin_wx/QQapi.php",
+      data: {
+        a: "i",
+        keyword: yuyin
+      },
+      dataType: 'json',
+      type: 'post',
+      success: function(data1) {
+        return data1.data;
+      },
+    });
+  };
+  var soudeyisheng = function() {
+    var audio = document.createElement("audio");
+    audio.src = "{MD_ROOT}/css/sou.mp3";
+    audio.play();
+  };
+  function escape2Html(str) {
+    var arrEntities = {
+      'lt': '<',
+      'gt': '>',
+      'nbsp': ' ',
+      'amp': '&',
+      'quot': '"'
+    };
+    return str.replace(/&(lt|gt|nbsp|amp|quot);/ig,
+    function(all, t) {
+      return arrEntities[t];
+    });
+  }
+  function getsendtext(weizhi, aimg, type, keyword, nick) {
+    if (aimg == '') {
+      aimg = '../addons/qidong_plp/css/yh.png';
+    }
+    $all = '   <div class="msg ' + weizhi + ' clear">	<div class="nick-img">' + '<img width="100%" src="' + aimg + '" alt="' + nick + '"/></div>' + '	<div class="nick-text">' + '		<div class="txt-con">';
+    if (type == 'image') {
+      $all = $all + '<img width="100" style="cursor:pointer;" src="' + keyword + '" style="max-width:100%;"  onclick="javascript:window.open(this.src);"   />';
+    } else if (type == 'voice') {
+      $all = $all + '	<span class="audio-msg voiceplay" onclick="playlcvoice(' + keyword + ');"><i class="a-icon"></i></span>';
+    } else if (type == 'link') {
+      $all = $all + keyword;
+    } else if (type == 'other') {
+      $all = $all + '<a   href="' + keyword + '" >收到文件，点击下载</>';
+    } else {
+      $all = $all + keyword;
+    }
+    $all = $all + '	</div>			</div>		</div>	';
+    return $all;
+  }
+  function sendMsg(str, msg_type) {
+    if (str == '') {
+      return false;
+    }
+    if (online == false) {
+      console.log("离线了.");
+      var returnmsg = getsendtext('right', avatar, 'text', str, '我');
+      if (admin == "") {
+        $('#messageList').append(returnmsg);
+      } else {
+        $('#msglist' + userId).append(returnmsg);
+      }
+      $('#messagelist').animate({
+        scrollTop: 10000000
+      },
+      300);
+      var jqr;
+      var returnmsg = getsendtext('left', head_img, 'text', mang, '机器人');
+      if (admin == "") {
+        $('#messageList').append(returnmsg);
+      } else {
+        $('#msglist' + userId).append(returnmsg);
+      }
+      $('#messagelist').animate({
+        scrollTop: 10000000
+      },
+      300);
+    }
+    if (online == true) {
+      xiaoxi = str;
+      var check_res;
+      var offline;
+      if (msg_type == '') {
+        msg_type = 'text';
+      }
+      console.log("moshi:" + moshi);
+      if (moshi == '') {
+        moshi = 0;
+      }
+      if (moshi == 0) {
+        $.ajax({
+          async: false,
+          url: "https://web.17cheng.cn:2121/?type=publish&to=" + userId,
+          type: 'get',
+          data: {
+            content: str,
+            msgtype: msg_type,
+            ytime: "",
+            fopenid: uid,
+            avatar: avatar,
+            nickname: nickname,
+            website: website,
+            jsonid: jsonid
+          },
+          dataType: 'jsonp',
+          jsonpCallback: 'call_back',
+          success: function(json) {},
+          error: function(json) {
+            console.log("error");
+          }
+        });
+        var uniacid = "{$uniacid}";
+        var murl = "{php echo $this->createMobileUrl('Inserthistory')}";
+      
+		
+		   if (admin == 1) {
+          var kfopenid1 = userId;
+          var kfname1 = kfname;
+          var khopenid1 = uid;
+          var khname1 = nickname;
+          var add = 0;
+        } else {
+          var kfopenid1 = uid;
+          var kfname1 = nickname;
+          var khopenid1 = userId;
+          var khname1 = khname;
+          var add = 1;
+        }
+		
+      
+       
+        $.ajax({
+          url: murl,
+          data: {
+            uniacid: uniacid,
+            toUsername: jsonid,
+            khopenid: khopenid1,
+            keyword: str,
+            type: msg_type,
+            kfname: kfname1,
+            kfopenid: kfopenid1,
+            khname: khname1,
+            wzid: wzid,
+            add: add,
+            yyname: '',
+            yylogo: '',
+            avartar: avatar,
+          },
+          dataType: 'json',
+          type: 'post',
+          success: function(data) {
+            console.log('记录成功');
+            console.log("murl:" + murl);
+            console.log(data);
+          },
+          error: function(data) {
+            console.log('记录失败');
+            console.log("data");
+          }
+        });
+     
+      }
+      var myDate = new Date();
+      if (msg_type == 'image') {
+        if (moshi == 1) {
+          inmsg = website + str;
+        } else {
+          inmsg = str;
+        }
+      } else if (msg_type == 'text') {
+        inmsg = str;
+      } else {}
+      var returnmsg = getsendtext('right', avatar, msg_type, inmsg, '我');
+      $('#msglist' + userId).append(returnmsg);
+      $('#messagelist').animate({
+        scrollTop: 10000000
+      },
+      300);
+    }
+  }</script>
+</body>
+
+</html>

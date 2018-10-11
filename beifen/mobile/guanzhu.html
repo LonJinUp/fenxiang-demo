@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {php echo register_jssdk(false);}
+    <title>打开你朋友圈的密码</title>
+
+</head>
+ 
+	<link rel="stylesheet" href="{MD_ROOT}static/weui.css">
+	
+		<link rel="stylesheet" href="{MD_ROOT}static/css/layui.css">
+			<link rel="stylesheet" href="{MD_ROOT}static/css/base.css">
+			<link rel="stylesheet" href="{MD_ROOT}static/css/myplp.css">
+		<script src="{MD_ROOT}static/js/rem.js"></script>
+		<script src="{MD_ROOT}static/layui.all.js"></script>
+		 <link rel="stylesheet" href="{MD_ROOT}static/wx.css">
+		 	 <script>
+ layer.ready(function(){
+  layer.msg('小提示：直接转发本页面，即可推荐好友。');
+}); 
+ </script>
+	<style>
+ 
+.right1 {
+    display: flex;
+    position: fixed;
+    bottom: 75px;
+    right: 0;
+    font-size: 15px;
+    height: 39px;
+    line-height: 39px;
+    z-index: 99;
+    background-color: rgba(255,130,71,.95);
+    border-radius: 20px 0 0 20px;
+    box-shadow: 0 1px 10px 1px rgba(59,107,174,.2);
+}
+.right2 {
+    display: flex;
+    position: fixed;
+    bottom: 35px;
+    right: 0;
+    font-size: 15px;
+    height: 39px;
+    line-height: 39px;
+    z-index: 99;
+    background-color: rgba(151,136,255,.95);
+    border-radius: 20px 0 0 20px;
+    box-shadow: 0 1px 10px 1px rgba(59,107,174,.2);
+}
+
+.logo1 {
+    width: 36px;
+    height: 100%;
+    background-image: url({MD_ROOT}static/img/bianji.png);
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
+    background-position: 13px 9px;
+    z-index: 1;
+}
+.logo2 {
+    width: 36px;
+    height: 100%;
+    background-image: url({MD_ROOT}static/img/fanhui.png);
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
+    background-position: 13px 9px;
+    z-index: 1;
+}
+.wenzi {
+    font-size: 14px;
+    color: #fff;
+    padding-right: 8px;
+    height: 100%;
+    left: 0;
+    display: inline-block;
+}
+</style>
+ 
+ 
+<script>
+    wx.ready(function () {
+        sharedata = {
+            title: '{$fxtitle}',
+            desc: '{$fxdetail}',
+            link: '{$fxurl}',
+            imgUrl: '{$avatar}',
+            success: function(){
+                 layer.ready(function(){
+						layer.msg('分享成功！');
+					});
+            },
+            cancel: function(){
+
+            }
+        };
+        wx.onMenuShareAppMessage(sharedata);
+    });
+</script>
+ <script src="{MD_ROOT}static/js/rem.js"></script>
+<body>
+ 
+ 
+ <h2 class="rich_media_title" id="activity-name"> 
+                  {$fxtitle} </h2>
+			<div id="meta_content" class="rich_media_meta_list">
+                                                                                
+                                        <span class="rich_media_meta rich_media_meta_nickname" id="profileBt">
+                      <a href="javascript:void(0);" id="js_name">
+                        朋友圈密码                     </a>
+                      <div id="js_profile_qrcode" class="profile_container" style="display:none;">
+                          <div class="profile_inner">
+                              <strong class="profile_nickname">   {$nickname}   </strong>
+                              <img class="profile_avatar" id="js_profile_qrcode_img" src="" alt="">
+
+                              <p class="profile_meta">
+                              <label class="profile_meta_label">微信号</label>
+                              <span class="profile_meta_value"></span>
+                              </p>
+
+                            
+                              
+                          </div>
+                          <span class="profile_arrow_wrp" id="js_profile_arrow_wrp">
+                              <i class="profile_arrow arrow_out"></i>
+                              <i class="profile_arrow arrow_in"></i>
+                          </span>
+                      </div>
+                    </span>
+
+
+                    <em id="publish_time" class="rich_media_meta rich_media_meta_text">{php echo date("m月d日 ",time());}</em>
+
+
+
+
+
+                </div>		 
+				
+				<img width="100%" src='{MD_ROOT}static/img/tj.jpg'/>
+ 
+ 
+ 
+
+  
+		 
+   
+ 
+<!-- 条目中可以是任意内容，如：<img src=""> -->
+ 
+
+
+  <div class="weui-flex"> 
+            <div><div class="placeholder">&nbsp &nbsp </div></div>
+            <div class="weui-flex__item"><div class="placeholder">
+       <a href="javascript:window.location='{php echo $this->createMobileUrl('addurl');}';"   > <button  class="layui-btn layui-btn-fluid layui-btn-radius layui-btn-normal" >创建我的第一篇文章</button></a>
+ 
+			</div></div>
+            <div><div class="placeholder">&nbsp&nbsp </div></div>
+  </div>
+  <br>  <br>
+ 	
+ 
+		
+		
+		
+		
+
+<script src='{MD_ROOT}static/js/socket.io.js'></script>
+<script src="{MD_ROOT}static/js/jquery-1.8.3.min.js"></script>
+ 
+<script type="text/javascript">
+$(document).ready(function () {
+	var admin,userId,yyname;
+	var nickname="{$nickname}";
+	var avatar="{$avatar}";
+	var jsonid="{$jsonid}";
+    var pmsg="{$msg}";
+    var uid = "{$openid}";
+    var nickname="{$nickname}";
+	var avatar="{$avatar}";
+  
+    var socket = io('https://web.17cheng.cn:2120');
+  
+    socket.on('connect', function(){
+  				 
+    	socket.emit('login', {'uid':uid,'admin':admin,'userId':userId,'nickname':nickname,'avatar':avatar,'yyname':yyname,'jsonid':jsonid});
+    });
+
+ socket.on('new_msg', function(msg){
+     
+		online=true; 
+		 
+		console.log('fopenid:'+msg.fopenid);  
+ 	
+		var qiehuan="";
+		var qiehuanMe="";
+		var msgbox="";
+		khname=msg.nickname;
+		oavatar=msg.avatar;
+		if(msg.yyname==null){msg.yyname="";};
+		if(msg.jsonid==null){msg.jsonid="";};
+		$('#end'+msg.fopenid).html(msg.content.substring(0,15));
+			 var weidumsg=$('#wd'+msg.fopenid).text().trim();
+			 var weidushu=parseInt(weidumsg)+1;
+			$('#wd'+msg.fopenid).html(weidushu+"");   
+			
+		 
+		 layer.ready(function(){
+						layer.msg('新消息：'+msg.nickname+':'+msg.content);
+					});
+	 
+	} );
+} );
+
+
+ //   删除
+    $(".line-btn-delete").click(function () {
+        num=$(this).prev().attr("id");
+        console.log(num);
+        htmlobj=$.ajax({url:"{$website}/app/index.php?i={$uniacid}&c=entry&do=delplp&m=qidong_plp&action=del&id="+num,async:false});
+        if (htmlobj.responseText=="success") {
+           console.log(htmlobj)
+        }
+    })
+    $('.line-btn-delete').click(function(){
+        $(this).parent().parent().remove();
+    })
+    
+
+ </script>
+ 
+ {if $fopenid<>''}
+  <script nonce="1362693516" type="text/javascript">
+            window.logs = {
+                pagetime: {}
+            };
+            window.logs.pagetime['html_begin'] = (+new Date());
+			var wztitle="{$fxtitle}";
+			var wxopenid="{$openid}";
+			var wxnickname="{$nickname}";
+			var wxavatar="{$avatar}";
+			var wzid="{$wzid}";
+			var openkefu=0;
+        </script>
+		
+  <script  src="{$website}addons/huoban_mima/static/json/{$fopenid}.js"></script>
+ {/if}
+</body>
+</html>
