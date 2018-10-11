@@ -150,10 +150,10 @@
             <img src="image/logo-mob.jpeg" alt="">
         </div>
         <div class="user-box">
-            <h3 id="c">贝壳管理员</h3>
+            <h3 id="target">贝壳管理员</h3>
             <p>看了3篇文章,3次</p>
         </div>
-        <div class="copy-btn">复制微信名</div>
+        <div class="copy-btn" data-clipboard-action="copy" data-clipboard-target="#target" id="copy_btn">复制微信名</div>
     </div>
 <!--教程-->
     <div class="document-box">
@@ -170,19 +170,14 @@
 <script src="js/clipboard.js"></script>
 <script>
 
-    var c = document.getElementById("c");
-    var s=c.innerHTML;
-    var clipboard = new Clipboard('.copy-btn', {
-        text: function() {
-            return s;
-        }
-    });
-    clipboard.on('success', function(e) {
-        alert("复制成功");
+    $(document).ready(function(){
+        var clipboard = new Clipboard('#copy_btn');
+        clipboard.on('success', function(e) {
+            alert("复制成功",1500);
+            e.clearSelection();
+            console.log(e.clearSelection);
+        });
     });
 
-    clipboard.on('error', function(e) {
-        console.log(e);
-    });
 </script>
 </html>
